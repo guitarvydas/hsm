@@ -1,0 +1,10 @@
+hsm {
+  Machine = "machine" name MachineDefinition
+  MachineDefinition = "{" DefaultState State+ "}"
+  DefaultState = "default" ":" name
+  State =
+    | Machine
+    | "state" ":" name "{" EntryCode? Handler+ ExitCode? "}"
+  EntryCode = "enter" ":" verbatim
+  ExitCode = "exit" ":" verbatim
+}

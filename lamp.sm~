@@ -1,0 +1,26 @@
+sub intensity (intensity) {
+  default: low
+  state: low {
+    on intensity: next medium
+  }
+  state: medium {
+    on intensity: next high
+  }
+  state: high {
+    on intensity: next low
+  }
+}
+
+
+sub color (color) {
+  default: yellow
+  state: yellow {
+    on color: next green
+  }
+  state: green {
+    on color: next red
+  }
+  state: red {
+    on color: next yellow
+  }
+}

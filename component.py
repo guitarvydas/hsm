@@ -39,7 +39,8 @@ class Component:
         raise Exception ("isBusy not overridden")
     def on (self, message, transitionList):
         for transition in transitionList:
-            if (self.state.name == transition.state.name and message.port == transition.port):
+            if (self.state.name == transition.state.name):
+                and message.port == transition.port):
                 transition.function ()
                 if transition.isNoChange ():
                     pass

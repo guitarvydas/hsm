@@ -1,0 +1,22 @@
+hsm {
+  Machine = "machine" name MachineDefinition
+  MachineDefinition = "{" DefaultState (State | Machine)+ "}"
+  DefaultState = "default" ":" name
+  State = "state" name SubMachine? "{" EntryCode? Handler* ExitCode? "}"
+  SubMachine = "<<" name
+  EntryCode = "enter" ":" verbatim
+  ExitCode = "exit" ":" verbatim
+  Handler = "on" name ":" "{" HandlerStatement+ "}"
+  HandlerStatement =
+    | verbatim    -- verbatim
+    | "next" name -- next
+
+  name = 
+    | baseName
+    | compoundName
+  baseName = nameFirst nameRest*
+  nameFirst = letter
+  nameRest = alnum | "_"
+  compoundName = "❲" (~"❳" any)+ "❳"
+  verbatim = "⟨" (~"⟩" any)+ "⟩"
+}

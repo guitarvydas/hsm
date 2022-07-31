@@ -1,41 +1,46 @@
 machine lamp {
 
   default: off
-  state off << intensity {
+  state off {
+    contains brightness
   }
-  state on << intensity {
+  state on {
+    contains brightness
   }
 
-    machine intensity {
+    machine brightness {
       default: low
-      state low << color {
-	on intensity: { next medium }
+      state low {
+        on brightness: { next medium }
+        contains color
       }
-      state medium << color {
-	on intensity: { next high }
+      state medium {
+        on brightness: { next high }
+        contains color
       }
-      state high << color {
-	on intensity: { next low }
+      state high {
+        on brightness: { next low }
+        contains color
       }
     }
 
 
-	machine color {
-	  default: yellow
-	  state yellow {
-	    enter: ⟨// entry ⟩
-	    on color: { next green }
-	    exit: ⟨// exit ⟩
-	  }
-	  state green {
-	    enter: ⟨// entry ⟩
-	    on color: { next red }
-	    exit: ⟨// exit ⟩
-	  }
-	  state red {
-	    enter: ⟨// entry ⟩
-	    on color: { next yellow }
-	    exit: ⟨// exit ⟩
-	  }
-	}
+        machine color {
+          default: yellow
+          state yellow {
+            enter: ⟨// entry ⟩
+            on color: { next green }
+            exit: ⟨// exit ⟩
+          }
+          state green {
+            enter: ⟨// entry ⟩
+            on color: { next red }
+            exit: ⟨// exit ⟩
+          }
+          state red {
+            enter: ⟨// entry ⟩
+            on color: { next yellow }
+            exit: ⟨// exit ⟩
+          }
+        }
 }

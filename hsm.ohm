@@ -2,9 +2,9 @@ hsm {
   Machine = "machine" name MachineDefinition
   MachineDefinition = "{" DefaultState (State | Machine)+ "}"
   DefaultState = "default" ":" name
-  State = "state" name SubMachine? "{" EntryCode? Handler* ExitCode? "}"
-  SubMachine = "<<" name
+  State = "state" name "{" EntryCode? Handler* Contains? ExitCode? "}"
   EntryCode = "enter" ":" verbatim
+  Contains = "contains" name
   ExitCode = "exit" ":" verbatim
   Handler = "on" name ":" "{" HandlerStatement+ "}"
   HandlerStatement =

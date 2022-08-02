@@ -35,6 +35,8 @@ class Component:
             resultdict [message.port].enqueue (message.data)
         self.outputq = FIFO () # discard outputq
         return resultdict
+    def isReady (self):
+        return (not self.inputq.isEmpty ())
     def isBusy (self):
         raise Exception ("isBusy not overridden")
     def on (self, message, transitionList):

@@ -1,63 +1,88 @@
-enter ON:
-  enter ON/brightness.default
-    enter ON/brightness/dim.default
-      enter ON/brightness/dim/yellow
+case 1:
+create Lamp
+click pwr
+click pwr
+
+lampInstance = Lamp ({})
+machine Lamp = λ(~).{
+  local {
+    // state OFF
+    enter_OFF: λ(e).{ e.fexit: ~.local.exit_OFF }
+    exit_OFF: nullFunction
+    handle_OFF: λ(message, e).{
+      cond { (message.port == 'pwr') { ~.comp.next ('ON', e) } }
+    }
+    // state ON
+    enter_ON: λ(e).{ e.fexit: ~.local.exit_ON }
+    exit_ON: nullFunction
+    handle_ON: λ(message, e).{
+      cond { (message.port == 'pwr') { ~.comp.next ('OFF', e) }
+      else { delegate brightness (e.child) }
+      }
+    }
+    // Machine Lamp
+    machineEnter: λ(e).{ 
+      e.state = 'OFF'
+      e.env.childEnv = call local.enter_OFF (~)
+      ...or... e.env.childEnv = call (lookupState (~, 'OFF'), "enter", ~)
+      e.fexit: local.machineExit
+    }
+    machineExit: λ(e).{
+      exit brightness (e.child)
+      e.child <- ∅
+    }
+  }
+  ~.env = { state: ∅, delegated: ∅, inq: ∅, outq: ∅ }
+  ~.comp = Component ()
+  ~.rom.states = [
+    { name: 'OFF', descriptor: { enter: local.enter_OFF, exit: local.exit_OFF, handle: local.handle_OFF}},
+    { name: 'ON',  descriptor: { enter: local.enter_ON,  exit: local.exit_ON,  handle: local.handle_ON}}
+    ]
+  return ~
+  }
+
+--> lampInstance.enter () == λ(e).{ e.state <- ~.state_OFF ; e.child <- ∅ } (lampInstance)
+  -->
+    lampInstance.state = Lamp.state_Off
+    lampInstance.child = ∅
+
+lampInstance.inject (Message ('pwr', True, ∅))
+--> lampInstance.inq.enqueue (Message ('pwr', True,  ∅))
+lampInstance.inject (Message ('pwr', True, ∅))
+--> lampInstance.in.enqueue (Message ('pwr', True,  ∅))
 
 
-next ON/brightness/dim/green
-  exit ON/brightness/dim/yellow
-  enter ON/brightness/dim/green
-
-next OFF
-  exit ON/brightness/dim/green
-  exit ON/brightness/dim
-  exit ON/brightness
-  exit ON
-  enter OFF
-
-next ON
-  exit OFF
-  enter ON
-    enter ON/brightness
-      enter ON/brightness/default = ON/brightness/dim
-        enter ON/brightness/dim/default = ON/brightness/dim/yellow
-
-ON.default = ON/brightness
-ON/brightness.default = ON/brightness/dim
-ON/brightness/dim.default = ON/brightness/dim/yellow
-ON/brightness/dim/yellow.default = nil
-
-ON.default = brightness
-brightness.default = dim
-dim.default = yellow
-yellow.default = nil
-
-machine Lamp (env) {
-  default OFF
-  enter { env <- { state: OFF, child: ∅ } }
-  exit { exit brightness (env.child) ; env.child <- ∅ }
-  state OFF { on pwr {next (ON, env)} }
-  state ON { on pwr {next (OFF, env)} ; env.child <- delegate brightness (env.child)}
-  return env
-}
-
-machine brightness (env) {
-  default dim
-  enter { env <- { state: dim , child: ∅ } }
-  exit { exit color (env.child) ; env.child <- ∅ }
-  state dim { on brightness { next (MID, env)} ; env.child <- delegate color (env.child) }
-  state MID { on brightness { next (HIGH, env)} ; env.child <- delegate color (env.child) }
-  state HIGH { on brightness { next (dim, env) } ; env.child <- delegate color (env.child) }
-  return env
-}
-
-machine color (env) {
-  default yellow
-  enter { env <- { state: yellow, child: ∅ } }
-  exit { env.child <- ∅ }
-  state yellow { on color {next (green, env)} }
-  state green { on color {next (red, env)} }
-  state red { on color {next (yellow, env)} }
-  return env
-}
-  
+lampInstance.runToCompletion ()
+--> lampInstance.isReady () --> True
+--> lampInstance.step (m)
+  --> m = lampInstance.inq.dequeue ()
+  --> lampInstance.handle (m, lampInstance)
+  [ 'OFF', ~.state_OFF ]
+    -->   ~.state_OFF = λ(M ('pwr', True, ∅), lampInstance).{
+            cond { (message.port == 'pwr') { ~.next ('ON', lampInstance) } }
+          }
+      --> { ~.next (~.state_ON, lampInstance) }
+	function next (~.state_ON, lampInstance) {
+	  if (lampInstance.child) { exit lampInstance.child.state (lampInstance.child) }
+	  env.child = ∅
+	  enter ~.state_ON (lampInstance)
+        --> enter_ON (lampInstance) { pass }
+	  env.state = ~.state_ON
+	}
+--> lampInstance.isReady () --> True
+--> lampInstance.step (m)
+  --> m = lampInstance.inq.dequeue ()
+  --> lampInstance.handle (m, lampInstance)
+  [ 'ON', ~.state_ON ]
+    -->   ~.state_ON = λ(M ('pwr', True, ∅), lampInstance).{
+            cond { (message.port == 'pwr') { ~.next ('OFF', lampInstance) } }
+          }
+      --> { ~.next (~.state_OFF, lampInstance) }
+	function next (~.state_OFF, lampInstance) {
+	  if (lampInstance.child) { exit lampInstance.child.state (lampInstance.child) }
+	  env.child = ∅
+	  enter ~.state_OFF (lampInstance)
+        --> enter_OFF (lampInstance) { pass }
+	  env.state = ~.state_OFF
+	}
+--> lampInstance.isReady () --> False

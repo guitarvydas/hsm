@@ -3,13 +3,6 @@ from brightness import Brightness
 
 class Lamp (Component):
 
-    def __init__ (self, parent, instanceName):
-        super ().__init__ (parent, instanceName)
-        self.states.off = {enter: enter_OFF, exit: exit_OFF, handle: handle_OFF, contained: None}
-        self.states.on = {enter: enter_ON, exit: exit_ON, handle: handle_ON, contained: Brightness ()}
-        self.defaultstate = self.states.off
-        self.state = self.defaultstate
-        
     def enter_OFF (self, e):
         self.state = self.states.off
         self.state.enter ()
@@ -49,5 +42,15 @@ class Lamp (Component):
     def reset (self):
         self.exit ()
         self.enter ()
+        
+
+    def __init__ (self, parent, instanceName):
+        super ().__init__ (parent, instanceName)
+        self.states = {
+            'off': {'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contained': None},
+            'on': {'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': Brightness (self, 'brighness')}
+            }
+        self.defaultstate = self.states.off
+        self.state = self.defaultstate
         
         

@@ -3,14 +3,6 @@ from colour import Colour
 
 class Brightness (Component):
 
-    def __init__ (self, parent, instanceName):
-        super ().__init__ (parent, instanceName)
-        self.states.dim = {enter: enter_DIM, exit: exit_DIM, handle: handle_DIM, contained: Colour ()}
-        self.states.mid = {enter: enter_MID, exit: exit_MID, handle: handle_MID, contained: Colour ()}
-        self.states.high = {enter: enter_HIGH, exit: exit_HIGH, handle: handle_HIGH, contained: Colour ()}
-        self.defaultState = self.states.dim
-        self.state = self.defaultState
-        
     def enter_DIM (self, e):
         self.state = self.states.off
         self.state.enter ()
@@ -68,4 +60,16 @@ class Brightness (Component):
     def reset (self):
         self.exit ()
         self.enter ()
+        
+
+    def __init__ (self, parent, instanceName):
+        super ().__init__ (parent, instanceName)
+        self.states = {
+            'dim': {'enter': self.enter_DIM, 'exit': self.exit_DIM, 'handle': self.handle_DIM, 'contained': Colour (self, 'dim colour')},
+            'mid': {'enter': self.enter_MID, 'exit': self.exit_MID, 'handle': self.handle_MID, 'contained': Colour (self, 'mid colour')},
+            'high': {'enter': self.enter_HIGH, 'exit': self.exit_HIGH, 'handle': self.handle_HIGH, 'contained': Colour (self, 'high colour')}
+        }
+        self.defaultState = self.states.dim
+        self.state = self.defaultState
+        
         

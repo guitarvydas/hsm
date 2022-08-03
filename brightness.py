@@ -1,7 +1,7 @@
-from component import Component
+from hsm import HSM
 from colour import Colour
 
-class Brightness (Component):
+class Brightness (HSM):
 
     def enter_DIM (self, e):
         self.state = self.states.off
@@ -48,19 +48,6 @@ class Brightness (Component):
         return False
 
 
-    def enter (self):
-        self.state = self.default
-        self.state.enter ()
-    def exit (self):
-        self.state.exit ()
-    def handle (self, message):
-        self.state.handle (message)
-
-    # override abstract methods
-    def reset (self):
-        self.exit ()
-        self.enter ()
-        
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)

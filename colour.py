@@ -1,6 +1,6 @@
-from component import Component
+from hsm import HSM
 
-class Colour (Component):
+class Colour (HSM):
 
         
     def enter_YELLOW (self, e):
@@ -47,19 +47,6 @@ class Colour (Component):
             self.unhandledMessage (message, 'RED', e)
         return False
 
-    def enter (self):
-        self.state = self.default
-        self.state.enter ()
-    def exit (self):
-        self.state.exit ()
-    def handle (self, message):
-        self.state.handle (message)
-
-    # override abstract methods
-    def reset (self):
-        self.exit ()
-        self.enter ()
-        
         
 
     def __init__ (self, parent, instanceName):

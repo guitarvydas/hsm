@@ -1,7 +1,7 @@
-from component import Component
 from brightness import Brightness
+from hsm import HSM
 
-class Lamp (Component):
+class Lamp (HSM):
 
     def enter_OFF (self, e):
         self.state = self.states.off
@@ -30,24 +30,11 @@ class Lamp (Component):
             self.unhandledMessage (message, 'ON', e)
         return False
 
-    def enter (self):
-        self.state = self.default
-        self.state.enter ()
-    def exit (self):
-        self.state.exit ()
-    def handle (self, message):
-        self.state.handle (message)
-
-    # override abstract methods
-    def reset (self):
-        self.exit ()
-        self.enter ()
-        
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        off = {'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contained': None}
-        on = {'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': Brightness (self, 'brightness')}
+        off = {'name': 'off', 'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contained': None}
+        on = {'name' : 'on', 'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': Brightness (self, 'brightness')}
         self.states = { 'off': off, 'on' : on }
         self.defaultstate = off
         self.state = off

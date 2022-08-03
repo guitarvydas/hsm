@@ -36,7 +36,7 @@ class Component:
         if (None == self.parent):
             return self.instanceName
         else:
-            return f'{self.parent.name}/{self.instanceName}'
+            return f'{self.parent.name ()}/{self.instanceName}'
 
     # internal
     def dequeueInput (self):

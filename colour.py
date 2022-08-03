@@ -54,6 +54,6 @@ class Colour (HSM):
         r = {'name': 'red', 'enter': self.enter_RED, 'exit': self.exit_RED, 'handle': self.handle_RED, 'contained': None}
         self.states = {'yellow': y, 'green': g, 'red': r }
         self.defaultState = y
-        self.enter (y)
+        self.enterDefault ()
 
         

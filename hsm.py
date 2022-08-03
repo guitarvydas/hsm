@@ -2,10 +2,12 @@ from leaf import Leaf
 class HSM (Leaf):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-    def enter (self, state):
-        self.state = state
-        print (f'{self.name ()} entering {state["name"]}')
-        state["enter"] ()
+    def enter (self):
+        print (f'{self.name ()} entering {self.state["name"]}')
+        self.state ["enter"] ()
+    def enterDefault (self):
+        self.state = self.defaultState
+        self.enter ()
     def exit (self):
         print (f'{self.name ()} exiting {self.state["name"]}')
         self.state ["exit"] ()
@@ -15,12 +17,14 @@ class HSM (Leaf):
 
     def next (self, state):
         self.exit ()
-        state ["enter"] ()
+        self.state = state
+        self.enter ()
         
     # override abstract methods
     def reset (self):
-        self.state ["exit"] ()
-        self.state ["enter"] ()
+        self.exit ()
+        self.state = self.defaultState
+        self.enter ()
         
 
     

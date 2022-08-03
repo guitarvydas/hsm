@@ -57,6 +57,6 @@ class Brightness (HSM):
         h = {'name': 'high', 'enter': self.enter_HIGH, 'exit': self.exit_HIGH, 'handle': self.handle_HIGH, 'contained': None}
         self.states = {'dim': d, 'mid': m, 'high': h}
         self.defaultState = d
-        self.enter (d)
+        self.enterDefault ()
         
         

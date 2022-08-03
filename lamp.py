@@ -37,5 +37,5 @@ class Lamp (HSM):
         on = {'name' : 'on', 'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': None}
         self.states = { 'off': off, 'on' : on }
         self.defaultState = off
-        self.enter (off)
+        self.enterDefault ()
         

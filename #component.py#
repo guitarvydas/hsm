@@ -10,6 +10,7 @@ class Component:
 
     # external
     def run (self):
+        raise Exception (f'run must be overridden for {self.name}')
         while self.isReady ():
             self.step (None)
     def step (self, message):
@@ -40,7 +41,7 @@ class Component:
 
     # internal
     def dequeueInput (self):
-        return self.inputq.dequeue ()
+        return self.inputq.pop ()
     def send (self, portname, data, causingMessage):
         trail = [causingMessage, causingMessage.trail]
         self.outputq.enqueue (Message (self, portname, data, trail))
@@ -51,3 +52,5 @@ class Component:
         print ()
         print (f'unhandled message {message} for {self.hierarchicalName ()}')
         exit ()
+    def enqueueExit (self, function):
+        self.exitStack.push (function)

@@ -16,4 +16,4 @@ class FIFO:
         return len (self._elements)
 
     def isEmpty (self):
-        return (0 < len (self._elements))
+        return (0 >= len (self._elements))

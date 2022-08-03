@@ -17,3 +17,7 @@ class Leaf (Component):
             self.handle (m)
             return True
         return False
+
+    def run (self):
+        while self.isReady ():
+            self.step ()

@@ -5,14 +5,14 @@ class Colour (HSM):
         
     def enter_YELLOW (self):
         self.state = self.states ["off"]
-        self.state.enter ()
+        self.state ["enter"] ()
     def exit_YELLOW (self):
-        self.state.exit ()
+        self.state ["exit"] ()
     def handle_YELLOW (self, message):
         if ('brightness' == message.port):
             self.next (self.states ["green"])
             return True
-        elif self.state.contained.handle (message):
+        elif self.state.contained ["handle"] (message):
             return True
         else:
             self.unhandledMessage (message, 'YELLOW')
@@ -20,14 +20,14 @@ class Colour (HSM):
 
     def enter_GREEN (self):
         self.state = self.states ["off"]
-        self.state.enter ()
+        self.state ["enter"] ()
     def exit_GREEN (self):
-        self.state.exit ()
+        self.state ["exit"] ()
     def handle_GREEN (self, message):
         if ('brightness' == message.port):
             self.next (self.states ["red"])
             return True
-        elif self.state.contained.handle (message):
+        elif self.state.contained ["handle"] (message):
             return True
         else:
             self.unhandledMessage (message, 'GREEN')

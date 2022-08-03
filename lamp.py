@@ -4,25 +4,25 @@ from hsm import HSM
 class Lamp (HSM):
 
     def enter_OFF (self):
-        self.state = self.states.off
+        self.state = self.states ["off"]
         self.state.enter ()
     def exit_OFF (self):
         self.state.exit ()
     def handle_OFF (self, message):
         if ('pwr' == message.port):
-            self.next (self.states.on)
+            self.next (self.states ["on"])
             return True
         else:
             self.unhandledMessage (message, 'OFF')
         return False
 
     def enter_ON (self):
-        self.state = self.states.on
+        self.state = self.states ["on"]
     def exit_ON (self):
         pass
     def handle_ON (self, message):
         if ('pwr' == message.port):
-            self.next (self.states.off)
+            self.next (self.states ["off"])
             return True
         elif self.state.contained.handle (message):
             return True

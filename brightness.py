@@ -4,13 +4,13 @@ from colour import Colour
 class Brightness (HSM):
 
     def enter_DIM (self):
-        self.state = self.states.off
+        self.state = self.states ["off"]
         self.state.enter ()
     def exit_DIM (self):
         self.state.exit ()
     def handle_DIM (self, message):
         if ('brightness' == message.port):
-            self.next (self.states.mid)
+            self.next (self.states ["mid"])
             return True
         elif self.state.contained.handle (message):
             return True
@@ -19,13 +19,13 @@ class Brightness (HSM):
         return False
 
     def enter_MID (self):
-        self.state = self.states.off
+        self.state = self.states ["off"]
         self.state.enter ()
     def exit_MID (self):
         self.state.exit ()
     def handle_MID (self, message):
         if ('brightness' == message.port):
-            self.next (self.states.high)
+            self.next (self.states ["high"])
             return True
         elif self.state.contained.handle (message):
             return True
@@ -34,12 +34,12 @@ class Brightness (HSM):
         return False
 
     def enter_HIGH (self):
-        self.state = self.states.on
+        self.state = self.states ["on"]
     def exit_HIGH (self):
         pass
     def handle_HIGH (self, message):
         if ('brightness' == message.port):
-            self.next (self.states.dim)
+            self.next (self.states ["dim"])
             return True
         elif self.state.contained.handle (message):
             return True

@@ -5,9 +5,9 @@ class Brightness (Component):
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        self.states.dim = {enter: enter_DIM, exit: exit_DIM, handle = handle_DIM, contained: Colour ()}
-        self.states.mid = {enter: enter_MID, exit: exit_MID, handle = handle_MID, contained: Colour ()}
-        self.states.high = {enter: enter_HIGH, exit: exit_HIGH, handle = handle_HIGH, contained: Colour ()}
+        self.states.dim = {enter: enter_DIM, exit: exit_DIM, handle: handle_DIM, contained: Colour ()}
+        self.states.mid = {enter: enter_MID, exit: exit_MID, handle: handle_MID, contained: Colour ()}
+        self.states.high = {enter: enter_HIGH, exit: exit_HIGH, handle: handle_HIGH, contained: Colour ()}
         self.defaultState = self.states.dim
         self.state = self.defaultState
         

@@ -5,9 +5,8 @@ class Lamp (HSM):
 
     def enter_OFF (self):
         self.state = self.states ["off"]
-        self.state ["enter"] ()
     def exit_OFF (self):
-        self.state ["exit"] ()
+        pass
     def handle_OFF (self, message):
         if ('pwr' == message.port):
             self.next (self.states ["on"])

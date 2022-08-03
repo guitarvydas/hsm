@@ -1,47 +1,53 @@
 from component import Component
+from brightness import Brightness
 
 class Lamp (Component):
-    self.enter = None
-    self.exit = None
-    self.handle = None
+
+    def __init__ (self, parent, instanceName):
+        super ().__init__ (parent, instanceName)
+        self.states.off = {enter: enter_OFF, exit: exit_OFF, handle = handle_OFF, contained: None}
+        self.states.on = {enter: enter_ON, exit: exit_ON, handle = handle_ON, contained: Brightness ()}
+        self.defaultstate = self.states.off
+        self.state = self.defaultstate
+        
     def enter_OFF (self, e):
-        self.enter = enter_OFF
-        self.exit = exit_OFF
-        self.handle = handle_OFF
+        self.state = self.states.off
+        self.state.enter ()
     def exit_OFF (self, e):
-        pass
+        self.state.exit ()
     def handle_OFF (self, message, e):
         if ('pwr' == message.port):
-            self.next (enter_ON, handle_ON, exit_ON)
-            self.send ('success', True)
+            self.next (self.states.on)
+            return True
         else:
             self.unhandledMessage (message, 'OFF', e)
-        self.send ('success', False)
+        return False
 
     def enter_ON (self, e):
-        s = self.lookupState ('ON')
-        self.on.brightness = Brightness ()
-        self.enter = enter_ON
-        self.exit = exit_ON
-        self.handle = handle_ON
+        self.state = self.states.on
     def exit_ON (self, e):
         pass
     def handle_ON (self, message, e):
         if ('pwr' == message.port):
-            self.next (enter_OFF, handle_OFF, exit_OFF)
-            self.send ('success', True)
-        elif self.on.brightness.handle (message, e.child):
-            self.send ('success', True)
+            self.next (self.states.off)
+            return True
+        elif self.state.contained.handle (message, e.contained):
+            return True
         else:
             self.unhandledMessage (message, 'ON', e)
-        self.send ('success', False)
-
-    self.default_ENTER = enter_OFF
+        return False
 
     def enter (self):
-        self.machineHandle = self.default_ENTER
-        self.machineHandle ()
+        self.state = self.default
+        self.state.enter ()
     def exit (self):
-        self.machineExit ()
+        self.state.exit ()
     def handle (self, message):
-        self.machineHandle (message)
+        self.state.handle (message)
+
+    # override abstract methods
+    def reset (self):
+        self.exit ()
+        self.enter ()
+        
+        

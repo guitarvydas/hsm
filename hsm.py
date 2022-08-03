@@ -10,8 +10,8 @@ class HSM (Leaf):
         self.enter ()
     def exit (self):
         print (f'{self.name ()} exiting {self.state["name"]}')
-        if (self.state ["contained"]):
-            self.state ["contained"].exit ()
+        if (self.state ["contains"]):
+            self.state ["contains"].exit ()
         self.state ["exit"] ()
     def handle (self, message):
         print (f'{self.name ()} handling {self.state["name"]}')

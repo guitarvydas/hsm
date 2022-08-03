@@ -17,14 +17,14 @@ class Lamp (HSM):
 
     def enter_ON (self):
         self.state = self.states ["on"]
-        self.state ["contained"] = Brightness (self, 'brightness')
+        self.state ["contains"] = Brightness (self, 'brightness')
     def exit_ON (self):
         pass
     def handle_ON (self, message):
         if ('pwr' == message.port):
             self.next (self.states ["off"])
             return True
-        elif self.state ["contained"] ["handle"] (message):
+        elif self.state ["contains"] ["handle"] (message):
             return True
         else:
             self.unhandledMessage (message, 'ON')
@@ -33,8 +33,8 @@ class Lamp (HSM):
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        off = {'name': 'off', 'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contained': None}
-        on = {'name' : 'on', 'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': None}
+        off = {'name': 'off', 'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contains': None}
+        on = {'name' : 'on', 'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contains': None}
         self.states = { 'off': off, 'on' : on }
         self.defaultState = off
         self.enterDefault ()

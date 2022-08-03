@@ -2,14 +2,6 @@ from component import Component
 
 class Colour (Component):
 
-    def __init__ (self, parent, instanceName):
-        super ().__init__ (parent, instanceName)
-        self.states.yellow = {enter: enter_YELLOW, exit: exit_YELLOW, handle: handle_YELLOW, contained: Colour ()}
-        self.states.green = {enter: enter_GREEN, exit: exit_GREEN, handle: handle_GREEN, contained: Colour ()}
-        self.states.red = {enter: enter_RED, exit: exit_RED, handle: handle_RED, contained: Colour ()}
-        self.defaultState = self.states.yellow
-        self.state = self.defaultState
-
         
     def enter_YELLOW (self, e):
         self.state = self.states.off
@@ -68,4 +60,15 @@ class Colour (Component):
         self.exit ()
         self.enter ()
         
+        
+
+    def __init__ (self, parent, instanceName):
+        super ().__init__ (parent, instanceName)
+        y = {'enter': self.enter_YELLOW, 'exit': self.exit_YELLOW, 'handle': self.handle_YELLOW, 'contained': None}
+        g = {'enter': self.enter_GREEN, 'exit': self.exit_GREEN, 'handle': self.handle_GREEN, 'contained': None}
+        r = {'enter': self.enter_RED, 'exit': self.exit_RED, 'handle': self.handle_RED, 'contained': None}
+        self.states = {'yellow': y, 'green': g, 'red': r }
+        self.defaultState = y
+        self.state = y
+
         

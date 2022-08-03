@@ -64,12 +64,11 @@ class Brightness (Component):
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        self.states = {
-            'dim': {'enter': self.enter_DIM, 'exit': self.exit_DIM, 'handle': self.handle_DIM, 'contained': Colour (self, 'dim colour')},
-            'mid': {'enter': self.enter_MID, 'exit': self.exit_MID, 'handle': self.handle_MID, 'contained': Colour (self, 'mid colour')},
-            'high': {'enter': self.enter_HIGH, 'exit': self.exit_HIGH, 'handle': self.handle_HIGH, 'contained': Colour (self, 'high colour')}
-        }
-        self.defaultState = self.states.dim
-        self.state = self.defaultState
+        d = {'enter': self.enter_DIM, 'exit': self.exit_DIM, 'handle': self.handle_DIM, 'contained': Colour (self, 'dim colour')}
+        m = {'enter': self.enter_MID, 'exit': self.exit_MID, 'handle': self.handle_MID, 'contained': Colour (self, 'mid colour')}
+        h = {'enter': self.enter_HIGH, 'exit': self.exit_HIGH, 'handle': self.handle_HIGH, 'contained': Colour (self, 'high colour')}
+        self.states = {'dim': d, 'mid': m, 'high': h}
+        self.defaultState = d
+        self.state = d
         
         

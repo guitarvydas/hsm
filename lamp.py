@@ -46,11 +46,10 @@ class Lamp (Component):
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        self.states = {
-            'off': {'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contained': None},
-            'on': {'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': Brightness (self, 'brighness')}
-            }
-        self.defaultstate = self.states.off
-        self.state = self.defaultstate
+        off = {'enter': self.enter_OFF, 'exit': self.exit_OFF, 'handle': self.handle_OFF, 'contained': None}
+        on = {'enter': self.enter_ON, 'exit': self.exit_ON, 'handle': self.handle_ON, 'contained': Brightness (self, 'brightness')}
+        self.states = { 'off': off, 'on' : on }
+        self.defaultstate = off
+        self.state = off
         
         

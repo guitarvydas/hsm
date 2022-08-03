@@ -3,19 +3,19 @@ class HSM (Leaf):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
     def enter (self):
-        print (f'{self.name ()} entering {self.state["name"]}')
+        print (f'{self.name ()} [{self.state["name"]}] entering')
         self.state ["enter"] ()
     def enterDefault (self):
         self.state = self.defaultState
         self.enter ()
     def exit (self):
-        print (f'{self.name ()} exiting {self.state["name"]}')
+        print (f'{self.name ()} [{self.state["name"]}] exiting')
         if (self.state ["contains"]):
             self.state ["contains"].exit ()
         self.state ["exit"] ()
     def handle (self, message):
-        print (f'{self.name ()} handling {self.state["name"]}')
-        self.state ["handle"] (message)
+        print (f'{self.name ()} [{self.state["name"]}] handling {message}')
+        return self.state ["handle"] (message)
 
     def next (self, state):
         self.exit ()

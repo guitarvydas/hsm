@@ -5,7 +5,7 @@ class Brightness (HSM):
 
     def enter_DIM (self):
         self.state = self.states ["dim"]
-        self.state ["contains"] = Colour (self, 'dim colour')
+        self.state ["contains"] = Colour (self, 'dim')
     def exit_DIM (self):
         pass
     def handle_DIM (self, message):
@@ -20,14 +20,14 @@ class Brightness (HSM):
 
     def enter_MID (self):
         self.state = self.states ["mid"]
-        self.state ["contains"] = Colour (self, 'mid colour')
+        self.state ["contains"] = Colour (self, 'mid')
     def exit_MID (self):
         pass
     def handle_MID (self, message):
         if ('brightness' == message.port):
             self.next (self.states ["high"])
             return True
-        elif self.state ["contains"] ["handle"] (message):
+        elif self.state ["contains"].handle (message):
             return True
         else:
             self.unhandledMessage (message, 'MID')
@@ -35,7 +35,7 @@ class Brightness (HSM):
 
     def enter_HIGH (self):
         self.state = self.states ["high"]
-        self.state.contains = Colour (self, 'high colour')
+        self.state.contains = Colour (self, 'high')
     def exit_HIGH (self):
         pass
     def handle_HIGH (self, message):

@@ -8,7 +8,7 @@ class Colour (HSM):
     def exit_YELLOW (self):
         pass
     def handle_YELLOW (self, message):
-        if ('brightness' == message.port):
+        if ('colour' == message.port):
             self.next (self.states ["green"])
             return True
         elif self.state.contains ["handle"] (message):
@@ -22,7 +22,7 @@ class Colour (HSM):
     def exit_GREEN (self):
         pass
     def handle_GREEN (self, message):
-        if ('brightness' == message.port):
+        if ('colour' == message.port):
             self.next (self.states ["red"])
             return True
         elif self.state.contains ["handle"] (message):
@@ -36,7 +36,7 @@ class Colour (HSM):
     def exit_RED (self):
         pass
     def handle_RED (self, message):
-        if ('brightness' == message.port):
+        if ('colour' == message.port):
             self.next (self.states ["yellow"])
             return True
         elif self.state.contains.handle (message):

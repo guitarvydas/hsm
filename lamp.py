@@ -24,7 +24,7 @@ class Lamp (HSM):
         if ('pwr' == message.port):
             self.next (self.states ["off"])
             return True
-        elif self.state ["contains"] ["handle"] (message):
+        elif self.state ["contains"].handle (message):
             return True
         else:
             self.unhandledMessage (message, 'ON')

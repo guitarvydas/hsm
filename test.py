@@ -1,10 +1,7 @@
-from lamp import Lamp
+from lamptester import LampTester
 from message import Message
 
-lamp = Lamp (None, 'lamp')
-lamp.inject (Message (lamp, 'pwr', True, None))
-lamp.inject (Message (lamp, 'brightness', True, None))
-lamp.inject (Message (lamp, 'colour', True, None))
-lamp.inject (Message (lamp, 'pwr', True, None))
-lamp.run ()
-print (lamp.outputs ())
+lamptester = LampTester (None, 'lamp tester')
+lamptester.inject (Message (lamptester, 'start', True, None))
+lamptester.run ()
+print (lamptester.outputs ())

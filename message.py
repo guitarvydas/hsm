@@ -17,10 +17,8 @@ class Message (BaseMessage):
         self.sender = sender
         self.port = port
         self.trail = trail
-        self.state = '?'
     def __repr__ (self):
-        return "{%s, %s, '%s','%s'}" % (self.state, self.sender.name,
-                                        self.port, super ().__repr__)
+        return "<%s, '%s', '%s', %s>" % (self.sender.name (), self.port, self.data, self.trail)
 
     def updateState (self, newState):
         if (newState == 'input'):

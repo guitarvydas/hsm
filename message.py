@@ -17,6 +17,7 @@ class Message (BaseMessage):
         self.sender = sender
         self.port = port
         self.trail = trail
+        self.state = '?'
     def __repr__ (self):
         return "<%s, '%s', '%s', %s>" % (self.sender.name (), self.port, self.data, self.trail)
 

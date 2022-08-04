@@ -20,8 +20,8 @@ class Component:
     def outputs (self):
         # return a dictionary of FIFOs, one FIFO per output port
         resultdict = {}
-        for message in self.outputq:
-            if None == resultdict [message.port]:
+        for message in self.outputq.asList ():
+            if (not (message.port in resultdict)):
                 resultdict [message.port] = FIFO ()
             resultdict [message.port].enqueue (message.data)
         self.outputq = FIFO () # discard outputq
@@ -41,8 +41,9 @@ class Component:
         return self.inputq.dequeue ()
     def send (self, portname, data, causingMessage):
         trail = [causingMessage, causingMessage.trail]
-        self.outputq.enqueue (Message (self, portname, data, trail))
-        self.outputq.updateState ('output')
+        m = Message (self, portname, data, trail)
+        m.updateState ('output')
+        self.outputq.enqueue (m)
     def handleNonMatchingMessage (self, message):
         # normal: just drop the message
         # but, in this POC, raise an error

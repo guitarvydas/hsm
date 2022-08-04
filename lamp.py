@@ -22,6 +22,7 @@ class Lamp (HSM):
         pass
     def handle_ON (self, message):
         if ('pwr' == message.port):
+            self.send ('power', True, message)
             self.next (self.states ["off"])
             return True
         elif self.state ["contains"].handle (message):

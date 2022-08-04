@@ -6,7 +6,7 @@ class FIFO:
     def __init__(self):
         self._elements = deque()
 
-    def __iter__ (self):
+    def asList (self):
         return self._elements
     
     def enqueue(self, element):

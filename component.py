@@ -10,8 +10,7 @@ class Component:
 
     # external
     def run (self):
-        while self.isReady ():
-            self.step (None)
+        raise Exception (f'run must be overridden for {self.name}')
     def step (self, message):
         raise Exception (f'step must be overridden for {self.name}')
     def reset (self):
@@ -20,9 +19,8 @@ class Component:
         self.inputq.enqueue (message)
     def outputs (self):
         # return a dictionary of FIFOs, one FIFO per output port
-        self.exitDefault ()
         resultdict = {}
-        for message in self.outputq ():
+        for message in self.outputq:
             if None == resultdict [message.port]:
                 resultdict [message.port] = FIFO ()
             resultdict [message.port].enqueue (message.data)

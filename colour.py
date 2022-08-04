@@ -1,9 +1,10 @@
-from hsm import HSM
+from hsm import SubHSM
 
-class Colour (HSM):
+class Colour (SubHSM):
 
         
     def enter_YELLOW (self):
+        self.send ('yellow', True, None)
         self.state = self.states ["yellow"]
     def exit_YELLOW (self):
         pass
@@ -18,6 +19,7 @@ class Colour (HSM):
         return False
 
     def enter_GREEN (self):
+        self.send ('green', True, None)
         self.state = self.states ["green"]
     def exit_GREEN (self):
         pass
@@ -32,6 +34,7 @@ class Colour (HSM):
         return False
 
     def enter_RED (self):
+        self.send ('red', True, None)
         self.state = self.states ["red"]
     def exit_RED (self):
         pass

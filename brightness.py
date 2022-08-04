@@ -1,7 +1,7 @@
-from hsm import HSM
+from hsm import SubHSM
 from colour import Colour
 
-class Brightness (HSM):
+class Brightness (SubHSM):
 
     def enter_DIM (self):
         self.state = self.states ["dim"]

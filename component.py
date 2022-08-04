@@ -44,7 +44,10 @@ class Component:
     def dequeueInput (self):
         return self.inputq.dequeue ()
     def send (self, portname, data, causingMessage):
-        trail = [causingMessage, causingMessage.trail]
+        if (causingMessage == None):
+            trail = [None]
+        else:
+            trail = [causingMessage, causingMessage.trail]
         m = Message (self, portname, data, trail)
         m.updateState ('output')
         self.outputq.enqueue (m)

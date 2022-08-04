@@ -4,6 +4,7 @@ from hsm import HSM
 class Lamp (HSM):
 
     def enter_OFF (self):
+        self.send ('lamp off', True, None)
         self.state = self.states ["off"]
     def exit_OFF (self):
         pass
@@ -16,6 +17,7 @@ class Lamp (HSM):
         return False
 
     def enter_ON (self):
+        self.send ('lamp on', True, None)
         self.state = self.states ["on"]
         self.state ["contains"] = Brightness (self, 'brightness')
     def exit_ON (self):

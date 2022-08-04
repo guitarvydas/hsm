@@ -20,12 +20,16 @@ class Component:
     def outputs (self):
         # return a dictionary of FIFOs, one FIFO per output port
         resultdict = {}
-        for message in self.outputq.asList ():
+        for message in self.outputq.asDeque ():
             if (not (message.port in resultdict)):
                 resultdict [message.port] = FIFO ()
             resultdict [message.port].enqueue (message.data)
         self.outputq = FIFO () # discard outputq
-        return resultdict
+        resultdict2 = {}
+        for key in resultdict:
+            fifo = resultdict [key]
+            resultdict2 [key] = fifo.asDeque ()
+        return resultdict2
     def isReady (self):
         return (not self.inputq.isEmpty ())
     def isBusy (self):

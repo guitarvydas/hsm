@@ -71,11 +71,10 @@ class Container (Component):
     def route (self, message, net):
         receiverList = net.receiverList ()
         for receiver in receiverList:
-            targetMessage = Message (self, message.port, message.data, message.trail)
             if (receiver == self):
-                receiver.enqueueOutput (targetMessage)
+                receiver.enqueueOutput (message)
             else:
-                receiver.enqueueInput (targetMessage)
+                receiver.enqueueInput (message)
 
     def initializeContainerDefault (self):
         default = {'name': 'default', 'enter': self.noop, 'exit': self.noop, 'handle': self.handle, 'sub': None}

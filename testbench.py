@@ -16,8 +16,5 @@ class TestBench (Container):
         conn3 = Connection (lamptester, 'brightness', net3)
         conn4 = Connection (lamptester, 'colour', net4)
         self.connections = [conn1, conn2, conn3, conn4]
-...
-        default = {'name': 'default', 'enter': self.noop, 'exit': self.noop, 'handle': self.handle, 'sub': None}
-        self.states = { 'default': default }
-        self.defaultState = default
-        self.enterDefault ()
+
+        self.initializeContainerDefault ()

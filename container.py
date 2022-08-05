@@ -1,4 +1,6 @@
 from component import Component
+from connection import Connection
+from net import Net
 
 # A Container is slightly different from a Leaf in that
 # Containers are composed of other Components, which ultimately boils down to Leaves
@@ -44,13 +46,40 @@ class Container (Component):
             child.reset ()
 
     # internal
+    def handle (self, message):
+        net = self.findNet (self, message.port)
+        self.route (message, net)
+        
     def stepAnyChild (self):
         for child in self.children:
             childActed = child.step ()
             if childActed:
+                self.routeChildOutputs (child)
                 return True
         return False
             
     def noop (self):
         pass
+
+    def findNet (instance, portname):
+        # lookup instance/portname in connections and return the corresponding net
+        for connection in self.connections:
+            if connection.hasSender (instance, portname):
+                return connection.net ()
+        raise Exception ('internal error: no connection for {instance.name}/{portname}')
+            
+    def route (self, message, net):
+        receiverList = net.receiverList ()
+        for receiver in receiverList:
+            targetMessage = Message (self, message.port, message.data, message.trail)
+            if (receiver == self):
+                receiver.enqueueOutput (targetMessage)
+            else:
+                receiver.enqueueInput (targetMessage)
+
+    def initializeContainerDefault (self):
+        default = {'name': 'default', 'enter': self.noop, 'exit': self.noop, 'handle': self.handle, 'sub': None}
+        self.states = { 'default': default }
+        self.defaultState = default
+        self.enterDefault ()
     

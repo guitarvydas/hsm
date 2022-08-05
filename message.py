@@ -12,14 +12,14 @@ class BaseMessage:
         return "%s" % (self.data)
 
 class Message (BaseMessage):
-    def __init__ (self, sender, port, data, trail):
+    def __init__ (self, component, port, data, trail):
         super ().__init__ (data)
-        self.sender = sender
+        self.component = component
         self.port = port
         self.trail = trail
         self.state = '?'
     def __repr__ (self):
-        return "<%s, '%s', '%s', %s>" % (self.sender.name (), self.port, self.data, self.trail)
+        return "<%s, '%s', '%s', %s>" % (self.component.name (), self.port, self.data, self.trail)
 
     def updateState (self, newState):
         if (newState == 'input'):

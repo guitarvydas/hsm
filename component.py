@@ -30,6 +30,8 @@ class Component:
             fifo = resultdict [key]
             resultdict2 [key] = fifo.asDeque ()
         return resultdict2
+    def outputQueue (self):
+        return self.outputq
     def isReady (self):
         return (not self.inputq.isEmpty ())
     def isBusy (self):

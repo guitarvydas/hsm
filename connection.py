@@ -8,4 +8,4 @@ class Connection:
         return self.netref
 
     def hasSender (self, instance, portname):
-        return (self.instance == instance an self.port == portname)
+        return (self.instance == instance and self.port == portname)

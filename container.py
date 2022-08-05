@@ -15,7 +15,7 @@ from net import Net
 #  all of which need to be processed to completion).
 
 class Container (Component):
-    def step:
+    def step (self):
         # delegate step to all children, if any of them did any work, return True
         workDone = self.stepAnyChild ()
         if workDone:
@@ -71,10 +71,20 @@ class Container (Component):
     def route (self, message, net):
         receiverList = net.receiverList ()
         for receiver in receiverList:
+            # Copy on write...
+            m = Message (message.sender, message.port, message.port, message.trail) 
             if (receiver == self):
-                receiver.enqueueOutput (message)
+                m.state = 'output'
+                receiver.enqueueOutput (m)
             else:
-                receiver.enqueueInput (message)
+                m.state = 'input'
+                receiver.enqueueInput (m)
+
+    def routeChildOutputs (child):
+        outputs = child.outputQueue ()
+        for message in outputs:
+            net = self.findNet (child, message.port)
+            self.route (message, net)
 
     def initializeContainerDefault (self):
         default = {'name': 'default', 'enter': self.noop, 'exit': self.noop, 'handle': self.handle, 'sub': None}

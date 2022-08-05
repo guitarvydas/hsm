@@ -12,7 +12,7 @@ class Colour (SubHSM):
         if ('colour' == message.port):
             self.next (self.states ["green"])
             return True
-        elif self.state.contains ["handle"] (message):
+        elif self.state.sub ["handle"] (message):
             return True
         else:
             self.unhandledMessage (message, 'YELLOW')
@@ -27,7 +27,7 @@ class Colour (SubHSM):
         if ('colour' == message.port):
             self.next (self.states ["red"])
             return True
-        elif self.state.contains ["handle"] (message):
+        elif self.state.sub ["handle"] (message):
             return True
         else:
             self.unhandledMessage (message, 'GREEN')
@@ -42,7 +42,7 @@ class Colour (SubHSM):
         if ('colour' == message.port):
             self.next (self.states ["yellow"])
             return True
-        elif self.state.contains.handle (message):
+        elif self.state.sub.handle (message):
             return True
         else:
             self.unhandledMessage (message, 'RED')
@@ -52,9 +52,9 @@ class Colour (SubHSM):
 
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        y = {'name': 'yellow', 'enter': self.enter_YELLOW, 'exit': self.exit_YELLOW, 'handle': self.handle_YELLOW, 'contains': None}
-        g = {'name': 'green', 'enter': self.enter_GREEN, 'exit': self.exit_GREEN, 'handle': self.handle_GREEN, 'contains': None}
-        r = {'name': 'red', 'enter': self.enter_RED, 'exit': self.exit_RED, 'handle': self.handle_RED, 'contains': None}
+        y = {'name': 'yellow', 'enter': self.enter_YELLOW, 'exit': self.exit_YELLOW, 'handle': self.handle_YELLOW, 'sub': None}
+        g = {'name': 'green', 'enter': self.enter_GREEN, 'exit': self.exit_GREEN, 'handle': self.handle_GREEN, 'sub': None}
+        r = {'name': 'red', 'enter': self.enter_RED, 'exit': self.exit_RED, 'handle': self.handle_RED, 'sub': None}
         self.states = {'yellow': y, 'green': g, 'red': r }
         self.defaultState = y
         self.enterDefault ()

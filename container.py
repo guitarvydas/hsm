@@ -58,6 +58,9 @@ class Container (Component):
                 return True
         return False
             
+    def enter (self):
+        self.state = self.states ["default"]
+
     def noop (self):
         pass
 
@@ -90,5 +93,5 @@ class Container (Component):
         default = {'name': 'default', 'enter': self.noop, 'exit': self.noop, 'handle': self.handle, 'sub': None}
         self.states = { 'default': default }
         self.defaultState = default
-        self.enterDefault ()
+        self.enter ()
     

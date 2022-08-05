@@ -1,4 +1,8 @@
+from connection import Connection
+from net import Net
 from container import Container
+from lamptester import LampTester
+from lamp import Lamp
 
 class TestBench (Container):
     def __init__ (self, parent, instanceName):

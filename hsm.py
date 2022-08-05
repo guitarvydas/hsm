@@ -1,5 +1,5 @@
 from leaf import Leaf
-debugHSM = False
+debugHSM = True
 class HSM (Leaf):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
@@ -15,8 +15,8 @@ class HSM (Leaf):
     def exit (self):
         if debugHSM:
             print (f'exiting {self}')
-        if (self.state ["contains"]):
-            self.state ["contains"].exit ()
+        if (self.state ["sub"]):
+            self.state ["sub"].exit ()
         self.state ["exit"] ()
     def handle (self, message):
         if debugHSM:
@@ -62,5 +62,5 @@ class SubHSM (HSM):
     def send (self, portname, data, causingMessage):
         sender = self.parent
         sender.send (portname, data, causingMessage)
-    #def handleNonMatchingMessage (self, message): <<inherited>>
+    #def unhandledMessage (self, message): <<inherited>>
     

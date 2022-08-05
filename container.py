@@ -1,6 +1,7 @@
 from component import Component
 from connection import Connection
 from net import Net
+from message import Message
 
 # A Container is slightly different from a Leaf in that
 # Containers are composed of other Components, which ultimately boils down to Leaves
@@ -32,13 +33,16 @@ class Container (Component):
     def run (self):
         # finish processing one input to completion, don't consume the next input
         ## doWhile...
+        if self.isReady ():
+            m = self.dequeueInput ()
+            self.handle (m)
         workDone = self.stepAnyChild ()
         while workDone:
             workDone = self.stepAnyChild ()
         ## end doWhile...
     def isBusy (self):
         for child in self.children:
-            if isBusy (child):
+            if child.isBusy ():
                 return True
         return False
     def reset (self):
@@ -64,18 +68,20 @@ class Container (Component):
     def noop (self):
         pass
 
-    def findNet (instance, portname):
+    def findNet (self, instance, portname):
         # lookup instance/portname in connections and return the corresponding net
         for connection in self.connections:
             if connection.hasSender (instance, portname):
                 return connection.net ()
-        raise Exception ('internal error: no connection for {instance.name}/{portname}')
+        raise Exception (f'internal error: no connection for {instance.name ()}/{portname}')
             
     def route (self, message, net):
         receiverList = net.receiverList ()
-        for receiver in receiverList:
+        for receiverTuple in receiverList:
+            receiver = receiverTuple [0]
+            port = receiverTuple [1]
             # Copy on write...
-            m = Message (message.sender, message.port, message.port, message.trail) 
+            m = Message (message.sender, port, message.value, message.trail) 
             if (receiver == self):
                 m.state = 'output'
                 receiver.enqueueOutput (m)
@@ -83,8 +89,9 @@ class Container (Component):
                 m.state = 'input'
                 receiver.enqueueInput (m)
 
-    def routeChildOutputs (child):
-        outputs = child.outputQueue ()
+    def routeChildOutputs (self, child):
+        outputs = child.outputQueue ().asDeque ()
+        child.clearOutputs ()
         for message in outputs:
             net = self.findNet (child, message.port)
             self.route (message, net)

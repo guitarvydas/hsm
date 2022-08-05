@@ -4,7 +4,7 @@ class Colour (SubHSM):
 
         
     def enter_YELLOW (self):
-        self.send ('yellow', True, None)
+        self.send ('colour', 'yellow', None)
         self.state = self.states ["yellow"]
     def exit_YELLOW (self):
         pass
@@ -15,11 +15,11 @@ class Colour (SubHSM):
         elif self.state.sub ["handle"] (message):
             return True
         else:
-            self.unhandledMessage (message, 'YELLOW')
+            self.unhandledMessage (message)
         return False
 
     def enter_GREEN (self):
-        self.send ('green', True, None)
+        self.send ('colour', 'green', None)
         self.state = self.states ["green"]
     def exit_GREEN (self):
         pass
@@ -30,11 +30,11 @@ class Colour (SubHSM):
         elif self.state.sub ["handle"] (message):
             return True
         else:
-            self.unhandledMessage (message, 'GREEN')
+            self.unhandledMessage (message)
         return False
 
     def enter_RED (self):
-        self.send ('red', True, None)
+        self.send ('colour', 'red',  None)
         self.state = self.states ["red"]
     def exit_RED (self):
         pass
@@ -45,7 +45,7 @@ class Colour (SubHSM):
         elif self.state.sub.handle (message):
             return True
         else:
-            self.unhandledMessage (message, 'RED')
+            self.unhandledMessage (message)
         return False
 
         

@@ -24,7 +24,7 @@ class Component:
             if (not (message.port in resultdict)):
                 resultdict [message.port] = FIFO ()
             resultdict [message.port].enqueue (message.data)
-        self.outputq = FIFO () # discard outputq
+        self.clearOutputs ()
         resultdict2 = {}
         for key in resultdict:
             fifo = resultdict [key]
@@ -32,6 +32,8 @@ class Component:
         return resultdict2
     def outputQueue (self):
         return self.outputq
+    def clearOutputs (self):
+        self.outputq = FIFO () # discard outputq (GC will collect discarded queue)
     def isReady (self):
         return (not self.inputq.isEmpty ())
     def isBusy (self):
@@ -43,6 +45,10 @@ class Component:
             return f'{self.parent.name ()}/{self.instanceName}'
 
     # internal
+    def enqueueInput (self, message):
+        return self.inputq.enqueue (message)
+    def enqueueOutput (self, message):
+        return self.outputq.enqueue (message)
     def dequeueInput (self):
         return self.inputq.dequeue ()
     def send (self, portname, data, causingMessage):
@@ -53,9 +59,9 @@ class Component:
         m = Message (self, portname, data, trail)
         m.updateState ('output')
         self.outputq.enqueue (m)
-    def handleNonMatchingMessage (self, message):
+    def unhandledMessage (self, message):
         # normal: just drop the message
         # but, in this POC, raise an error
         print ()
-        print (f'unhandled message {message} for {self.hierarchicalName ()}')
+        print (f'unhandled message {message} for {self.name ()}')
         exit ()

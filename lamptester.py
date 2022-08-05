@@ -3,18 +3,17 @@ from hsm import HSM
 class LampTester (HSM):
 
     def enter_DEFAULT (self):
-        self.send ('LampTester enter default', True, None)
         self.state = self.states ["default"]
     def exit_DEFAULT (self):
         raise Exception (f'internal error: leaving default prohibited {self.name}')
     def handle_DEFAULT (self, message):
         if ('start' == message.port):
             self.send ('pwr', True, None)
-            self.send ('brightness', True, None)
-            self.send ('colour', True, None)
+            #self.send ('brightness', True, None)
+            #self.send ('colour', True, None)
             return True
         else:
-            self.unhandledMessage (message, 'DEFAULT')
+            self.unhandledMessage (message)
         return False
 
     def __init__ (self, parent, instanceName):

@@ -7,7 +7,8 @@ from lamp import Lamp
 class TestBench (Container):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        lamptester = LampTester (self, '❲lamp tester❳')
+        #lamptester = LampTester (self, '❲lamp tester❳')
+        lamptester = LampTester (self, 'lamptester')
         lamp = Lamp (self, 'lamp')
         self.children = [lamptester, lamp]
         net1 = Net ('n1', [(lamptester, 'start')])

@@ -1,26 +1,31 @@
 from leaf import Leaf
-debugHSM = True
+from container import Container
+
+debugHSM = ''
 class HSM (Leaf):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
     def __repr__ (self):
         return f'{self.name ()}:[{self.state["name"]}]'
     def enter (self):
-        if debugHSM:
+        if (debugHSM and debugHSM == 'full'):
             print (f'entering {self}')
         self.state ["enter"] ()
     def enterDefault (self):
         self.state = self.defaultState
         self.enter ()
     def exit (self):
-        if debugHSM:
+        if (debugHSM and debugHSM == 'full'):
             print (f'exiting {self}')
         if (self.state ["sub"]):
             self.state ["sub"].exit ()
         self.state ["exit"] ()
     def handle (self, message):
-        if debugHSM:
-            print (f'handling {self}...{message}')
+        kind = 'Leaf'
+        if isinstance (self, Container):
+            kind = 'Container'
+        if (debugHSM):
+            print (f'handling HSM {kind} {self}...{message}')
         return self.state ["handle"] (message)
 
     def next (self, state):

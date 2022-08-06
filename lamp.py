@@ -4,10 +4,10 @@ from hsm import HSM
 class Lamp (HSM):
 
     def enter_OFF (self):
-        self.send ('state', 'off', None)
+        self.send ('state', '↱ off', None)
         self.state = self.states ["off"]
     def exit_OFF (self):
-        self.send ('state', 'x-off', None)
+        self.send ('state', 'off ↰', None)
     def handle_OFF (self, message):
         if ('pwr' == message.port):
             self.next (self.states ["on"])
@@ -17,11 +17,11 @@ class Lamp (HSM):
         return False
 
     def enter_ON (self):
-        self.send ('state', 'on', None)
+        self.send ('state', '↱ on', None)
         self.state = self.states ["on"]
         self.state ["sub"] = Brightness (self, 'brightness')
     def exit_ON (self):
-        self.send ('state', 'x-on', None)
+        self.send ('state', 'on ↰', None)
         pass
     def handle_ON (self, message):
         if ('pwr' == message.port):

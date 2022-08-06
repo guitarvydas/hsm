@@ -34,7 +34,7 @@ class Colour (SubHSM):
         return False
 
     def enter_RED (self):
-        self.send ('colour', 'red',  None)
+        print (f'enter red')
         self.state = self.states ["red"]
     def exit_RED (self):
         pass

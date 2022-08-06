@@ -4,7 +4,7 @@ class Colour (SubHSM):
 
         
     def enter_YELLOW (self):
-        self.send ('colour', 'yellow', None)
+        self.send ('state', 'yellow', None)
         self.state = self.states ["yellow"]
     def exit_YELLOW (self):
         pass
@@ -19,7 +19,7 @@ class Colour (SubHSM):
         return False
 
     def enter_GREEN (self):
-        self.send ('colour', 'green', None)
+        self.send ('state', 'green', None)
         self.state = self.states ["green"]
     def exit_GREEN (self):
         pass

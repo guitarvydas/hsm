@@ -4,7 +4,7 @@ from hsm import HSM
 class Lamp (HSM):
 
     def enter_OFF (self):
-        self.send ('power', True, None)
+        self.send ('state', 'power', None)
         self.state = self.states ["off"]
     def exit_OFF (self):
         pass

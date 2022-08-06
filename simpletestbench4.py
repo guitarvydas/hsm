@@ -9,7 +9,7 @@ class MidTester4 (Container):
         lamptester = LampTester (self, 'lamptester')
         self.children = [lamptester]
         net1 = Net ('n1', [(lamptester, 'start')])
-        net2 = Net ('n2', [(self, 'pow')])
+        net2 = Net ('n2', [(self, 'midpwr')])
         self.nets = [net1, net2]
         conn1 = Connection (self, 'start', net1)
         conn2 = Connection (lamptester, 'pwr', net2)
@@ -21,13 +21,13 @@ class MidTester4 (Container):
 class SimpleTestBench4 (Container):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        midtester = MidTester4 (self, 'midtester')
+        midtester = MidTester4 (self, 'midtester4')
         self.children = [midtester]
         net101 = Net ('n101', [(midtester, 'start')])
         net102 = Net ('n102', [(self, 'power')])
         self.nets = [net101, net102]
         conn1 = Connection (self, 'start', net101)
-        conn2 = Connection (midtester, 'pow', net102)
+        conn2 = Connection (midtester, 'midpwr', net102)
         self.connections = [conn1, conn2]
         self.initializeContainerDefault ()
         

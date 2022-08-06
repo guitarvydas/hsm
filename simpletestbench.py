@@ -10,7 +10,7 @@ class SimpleTestBench (Container):
         lamptester = LampTester (self, 'lamp tester')
         self.children = [lamptester]
         net1 = Net ('n1', [(lamptester, 'start')])
-        net2 = Net ('n2', [(lamptester, 'pwr')])
+        net2 = Net ('n2', [(self, 'power')])
         self.nets = [net1, net2]
         conn1 = Connection (self, 'start', net1)
         conn2 = Connection (lamptester, 'pwr', net2)

@@ -81,7 +81,7 @@ class Container (Component):
             receiver = receiverTuple [0]
             port = receiverTuple [1]
             # Copy on write...
-            m = Message (message.sender, port, message.value, message.trail) 
+            m = Message (message.sender, port, message.value (), message.trail) 
             if (receiver == self):
                 m.state = 'output'
                 receiver.enqueueOutput (m)

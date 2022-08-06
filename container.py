@@ -55,12 +55,14 @@ class Container (Component):
         self.route (message, net)
         
     def stepAnyChild (self):
+        result = False
         for child in self.children:
-            childActed = child.step ()
-            if childActed:
-                self.routeChildOutputs (child)
-                return True
-        return False
+            if (not result):
+                childActed = child.step ()
+                if childActed:
+                    self.routeChildOutputs (child)
+                    result = True
+        return result
             
     def enter (self):
         self.state = self.states ["default"]
@@ -103,3 +105,7 @@ class Container (Component):
         self.defaultState = default
         self.enter ()
     
+
+    def dumpQueues (self, prefix):
+        for child in self.children:
+            print (f'{prefix} child: {child.name ()} inputs:{child.inputq.asDeque ()} outputs:{child.outputq.asDeque ()}')

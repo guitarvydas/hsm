@@ -3,13 +3,15 @@ from net import Net
 from container import Container
 from lamptester import LampTester
 
-class SimpleTestBench (Container):
+class SimpleTestBench3 (Container):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        lamptester = LampTester (self, 'lamptester')
-        self.children = [lamptester]
-        net1 = Net ('n1', [(lamptester, 'start')])
-        net2 = Net ('n2', [(self, 'power')])
+        lamptesterA = LampTester (self, 'lamptesterA')
+        lamptesterB = LampTester (self, 'lamptesterB')
+        self.children = [lamptesterA, lamptesterB]
+        net1 = Net ('n1', [(lamptesterA, 'start')])
+        net2 = Net ('n2', [(lamptesterB, 'start')])
+        net3 = Net ('n3', [(self, 'power')])
         self.nets = [net1, net2]
         conn1 = Connection (self, 'start', net1)
         conn2 = Connection (lamptester, 'pwr', net2)

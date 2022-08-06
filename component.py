@@ -10,8 +10,7 @@ class Component:
 
     # external
     def run (self):
-        while self.isReady ():
-            self.step (None)
+        raise Exception (f'run must be overridden for {self.name}')
     def step (self, message):
         raise Exception (f'step must be overridden for {self.name}')
     def reset (self):
@@ -20,14 +19,21 @@ class Component:
         self.inputq.enqueue (message)
     def outputs (self):
         # return a dictionary of FIFOs, one FIFO per output port
-        self.exitDefault ()
         resultdict = {}
-        for message in self.outputq ():
-            if None == resultdict [message.port]:
+        for message in self.outputq.asDeque ():
+            if (not (message.port in resultdict)):
                 resultdict [message.port] = FIFO ()
             resultdict [message.port].enqueue (message.data)
-        self.outputq = FIFO () # discard outputq
-        return resultdict
+        self.clearOutputs ()
+        resultdict2 = {}
+        for key in resultdict:
+            fifo = resultdict [key]
+            resultdict2 [key] = fifo.asDeque ()
+        return resultdict2
+    def outputQueue (self):
+        return self.outputq
+    def clearOutputs (self):
+        self.outputq = FIFO () # discard outputq (GC will collect discarded queue)
     def isReady (self):
         return (not self.inputq.isEmpty ())
     def isBusy (self):
@@ -39,15 +45,23 @@ class Component:
             return f'{self.parent.name ()}/{self.instanceName}'
 
     # internal
+    def enqueueInput (self, message):
+        return self.inputq.enqueue (message)
+    def enqueueOutput (self, message):
+        return self.outputq.enqueue (message)
     def dequeueInput (self):
         return self.inputq.dequeue ()
     def send (self, portname, data, causingMessage):
-        trail = [causingMessage, causingMessage.trail]
-        self.outputq.enqueue (Message (self, portname, data, trail))
-        self.outputq.updateState ('output')
-    def handleNonMatchingMessage (self, message):
+        if (causingMessage == None):
+            trail = [None]
+        else:
+            trail = [causingMessage, causingMessage.trail]
+        m = Message (self, portname, data, trail)
+        m.updateState ('output')
+        self.outputq.enqueue (m)
+    def unhandledMessage (self, message):
         # normal: just drop the message
         # but, in this POC, raise an error
         print ()
-        print (f'unhandled message {message} for {self.hierarchicalName ()}')
+        print (f'unhandled message {message} for {self.name ()}')
         exit ()

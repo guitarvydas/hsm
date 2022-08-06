@@ -1,0 +1,9 @@
+class Connection:
+    def __init__ (self, instance, portname, net):
+        self.instance = instance
+        self.port = portname
+        self.netref = net
+
+    def net (self):
+        return self.netref
+    

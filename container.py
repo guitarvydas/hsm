@@ -76,18 +76,19 @@ class Container (Component):
         raise Exception (f'internal error: no connection for {instance.name ()}/{portname}')
             
     def route (self, message, net):
-        receiverList = net.receiverList ()
-        for receiverTuple in receiverList:
-            receiver = receiverTuple [0]
-            port = receiverTuple [1]
-            # Copy on write...
-            m = Message (message.sender, port, message.value (), message.trail) 
-            if (receiver == self):
-                m.state = 'output'
-                receiver.enqueueOutput (m)
-            else:
-                m.state = 'input'
-                receiver.enqueueInput (m)
+        if net:
+            receiverList = net.receiverList ()
+            for receiverTuple in receiverList:
+                receiver = receiverTuple [0]
+                port = receiverTuple [1]
+                # Copy on write...
+                m = Message (message.sender, port, message.value (), message.trail) 
+                if (receiver == self):
+                    m.updateState ('output')
+                    receiver.enqueueOutput (m)
+                else:
+                    m.updateState ('input')
+                    receiver.enqueueInput (m)
 
     def routeChildOutputs (self, child):
         outputs = child.outputQueue ().asDeque ()

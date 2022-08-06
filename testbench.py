@@ -7,7 +7,7 @@ from lamp import Lamp
 class TestBench (Container):
     def __init__ (self, parent, instanceName):
         super ().__init__ (parent, instanceName)
-        lamptester = LampTester (self, 'lamp tester')
+        lamptester = LampTester (self, '❲lamp tester❳')
         lamp = Lamp (self, 'lamp')
         self.children = [lamptester, lamp]
         net1 = Net ('n1', [(lamptester, 'start')])
@@ -15,7 +15,7 @@ class TestBench (Container):
         net3 = Net ('n3', [(lamp, 'brightness')])
         net4 = Net ('n4', [(lamp, 'colour')])
         net5 = Net ('n5', [(lamptester, 'power')])
-        net6 = Net ('n6', [(lamp, 'colour')])
+        net6 = Net ('n6', [(lamptester, 'colour')])
         self.nets = [net1, net2, net3, net4, net5, net6]
         conn1 = Connection (self, 'start', net1)
         conn2 = Connection (lamptester, 'pwr', net2)

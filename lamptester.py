@@ -9,8 +9,8 @@ class LampTester (HSM):
     def handle_DEFAULT (self, message):
         if ('start' == message.port):
             self.send ('pwr', True, None)
-            #self.send ('brightness', True, None)
-            #self.send ('colour', True, None)
+            self.send ('brightness', True, None)
+            self.send ('colour', True, None)
             return True
         else:
             self.unhandledMessage (message)

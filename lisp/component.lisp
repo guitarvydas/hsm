@@ -1,11 +1,11 @@
 (defclass Component ()
   ((parent :accessor parent :initarg :parent)
-   (instance-name :accessor instance-name :initarg :instance-name)
+   (instance-name :accessor instance-name :initarg :name)
    (inputq :accessor inputq :initform (make-instance 'FIFO))
    (outputq :accessor outputq :initform (make-instance 'FIFO))))
 
 (defgeneric run (self))
-(defgeneric step (self))
+(defgeneric step1 (self))
 (defgeneric reset (self))
 (defgeneric is-busy (self))
 

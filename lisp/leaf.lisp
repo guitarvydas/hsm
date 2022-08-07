@@ -1,9 +1,9 @@
-(defclass Leaf (Component))
+(defclass Leaf (Component) ())
 
 (defmethod is-busy ((self Leaf))
   nil)
 
-(defmethod step ((self Leaf))
+(defmethod step1 ((self Leaf))
   (cond ((is-ready self)
 	 (let ((m (dequeue-input self)))
 	   (handle self m)
@@ -12,4 +12,4 @@
 
 (defmethod run ((self Leaf))
   (cond ((not (is-ready self)) (return-from run))
-	(t (step self) (run self))))
+	(t (step1 self) (run self))))

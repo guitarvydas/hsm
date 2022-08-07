@@ -1,8 +1,10 @@
 (defclass Colour (HSM)
-  :states '(br-dim br-mid br-high)
-  :default-state 'br-dim)
+  ()
+  (:default-initargs
+   :states '(clr-yellow clr-green clr-red)
+   :default-state 'br-dim))
 
-(defparameter br-dim
+(defparameter cl-yellow
   '(make-state
     :enter (lambda (self) )
     :exit (lambda (self) )
@@ -12,7 +14,7 @@
 		    ((delegate 'Colour self message))
 		    (t (unhandled-message self message))))))
 
-(defparameter br-mid
+(defparameter clr-green
   '(make-state
     :enter (lambda (self) )
     :exit (lambda (self) )
@@ -22,7 +24,7 @@
 		    ((delegate 'Colour self message))
 		    (t (unhandled-message self message))))))
 
-(defparameter br-high
+(defparameter clr-red
   '(make-state
     :enter (lambda (self) )
     :exit (lambda (self) )
@@ -32,5 +34,5 @@
 		    ((delegate 'Colour self message))
 		    (t (unhandled-message self message))))))
 
-(defmethod initialize-instance :after ((self Colour) parent instance-name)
+(defmethod initialize-instance :after ((self Colour)  &key &allow-other-keys)
   (enter-default self))

@@ -2,5 +2,5 @@
   ((name :accessor name :initarg :name)
    (receivers :accessor receivers :initarg :receivers)))
 
-(defmethod receiverList ((self Net))
+(defmethod receiver-list ((self Net))
   (receivers self))

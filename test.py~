@@ -1,6 +1,0 @@
-from lamp import Lamp
-
-lamp = Lamp ()
-lamp.inject ('pwr', True)
-lamp.inject ('pwr', True)
-lamp.run ()

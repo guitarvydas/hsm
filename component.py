@@ -30,10 +30,6 @@ class Component:
             fifo = resultdict [key]
             resultdict2 [key] = fifo.asDeque ()
         return resultdict2
-    def outputQueue (self):
-        return self.outputq
-    def clearOutputs (self):
-        self.outputq = FIFO () # discard outputq (GC will collect discarded queue)
     def isReady (self):
         return (not self.inputq.isEmpty ())
     def isBusy (self):
@@ -65,3 +61,9 @@ class Component:
         print ()
         print (f'unhandled message {message} for {self.name ()}')
         exit ()
+
+    def outputQueue (self):
+        return self.outputq
+    def clearOutputs (self):
+        self.outputq = FIFO () # discard outputq (GC will collect discarded queue)
+        

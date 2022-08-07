@@ -1,6 +1,0 @@
-from fifo import FIFO
-
-fifo = deque ()
-fifo.enqueue (1)
-fifo.enqueue (2)
-print (fifo)

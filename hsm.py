@@ -63,7 +63,7 @@ class SubHSM (HSM):
 
     # internal
     def dequeueInput (self):
-        raise Exception (f'dequeuInput prohibited for SubHSM {self.name}')
+        raise Exception (f'dequeueInput prohibited for SubHSM {self.name}')
     def send (self, portname, data, causingMessage):
         sender = self.parent
         sender.send (portname, data, causingMessage)

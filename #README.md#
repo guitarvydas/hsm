@@ -23,6 +23,8 @@ Usage:
 See:
 hsm.drawio tab "Lamp"
 hsm.drawio tab "Lamp Tester"
+
+code:
 Lamp.py
 - brightness.py
 -- colour.py

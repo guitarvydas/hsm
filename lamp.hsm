@@ -1,0 +1,12 @@
+machine Lamp {
+  state OFF {
+    on pwr { next ON }
+  }
+  state ON {
+    on pwr {
+      send power ⟨True⟩
+      next OFF
+    }
+   delegate Brightness
+  }
+}

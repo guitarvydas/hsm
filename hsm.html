@@ -18,8 +18,18 @@
     </textarea>
 
 
-    <p>transpiled:</p>
-    <textarea id="output" rows="7" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
+    <p>identity:</p>
+    <textarea id="identity" rows="7" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
+    </textarea>
+    <br>
+    <br>
+    <p id="status" > READY </p>
+    <br>
+    <br>
+    <br>
+
+    <p>lisp:</p>
+    <textarea id="lisp" rows="7" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
     </textarea>
     <br>
     <br>
@@ -78,7 +88,7 @@ nameRest = alnum | "_"
 }
 `;
 
-      const hsmfmt = String.raw`
+      const identityfmt = String.raw`
 HSM {
 Machine [ kmachine name lb Entry? State+ Exit? rb ] = ‛«kmachine»«name»«lb»«Entry»«State»«Exit»«rb»’
 State [ kstate name lb Entry? Transition+ Delegate? Exit? rb ] = ‛«kstate»«name»«lb»«Entry»«Transition»«Delegate»«Exit»«rb»’
@@ -100,20 +110,49 @@ nameRest [ c ] = ‛«c»’
 }
 `;
 
-      function generateHelper (src, grammarName, grammar, fmt) {
-	  document.getElementById('src').innerHTML = src;
+            const lispfmt = String.raw`
+HSM {
+Machine [ kmachine name lb Entry? State+ Exit? rb ] = ‛«kmachine»«name»«lb»«Entry»«State»«Exit»«rb»’
+State [ kstate name lb Entry? Transition+ Delegate? Exit? rb ] = ‛«kstate»«name»«lb»«Entry»«Transition»«Delegate»«Exit»«rb»’
+Transition [ kon name lb TransitionStatement+ rb ] = ‛«kon»«name»«lb»«TransitionStatement»«rb»’
+Delegate [ kdelegate name ] = ‛«kdelegate»«name»’
+Entry [ kenter lb Statement+ rb ] = ‛«kenter»«lb»«Statement»«rb»’
+Exit [ kexit lb Statement+ rb ] = ‛«kexit»«lb»«Statement»«rb»’
+TransitionStatement_next [ knext name ] = ‛«knext»«name»’
+TransitionStatement_statement [ Statement ] = ‛«Statement»’
+Statement_send [ ksend name verbatim ] =  ‛«ksend»«name»«verbatim»’
+Statement_verbatim [ verbatim ] = ‛«verbatim»’
+
+verbatim [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’
+verbatimInnards_nested [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’
+verbatimInnards_bottom [ any ] = ‛«any»’
+name [ nameFirst nameRest* ] = ‛«nameFirst»«nameRest»’
+nameFirst [ c ] = ‛«c»’
+nameRest [ c ] = ‛«c»’
+}
+`;
+
+      function displaySource (s) {
+	  document.getElementById('src').innerHTML = s;
+      }
+      
+      function generateHelper (field, src, grammarName, grammar, fmt) {
 	  [success, transpiled, errormessage] = transpile (src, grammarName, grammar, fmt);
 	  if (success) {
-	      document.getElementById('output').value = transpiled;
+	      document.getElementById(field).value = transpiled;
 	      document.getElementById('status').innerHTML = "OK";
+	      return true;
 	  } else {
-	      document.getElementById('output').value = transpiled;
+	      document.getElementById(field).value = transpiled;
 	      document.getElementById('status').innerHTML = "FAILED " + errormessage;
+	      return false;
 	  }
       }
 
       function generate () {
-	  generateHelper (hsmsrc, "HSM", hsmgrammar, hsmfmt);
+	  displaySource (hsmsrc);
+	  generateHelper ('identity', hsmsrc, "HSM", hsmgrammar, identityfmt);
+	  generateHelper ('lisp', hsmsrc, "HSM", hsmgrammar, lispfmt);
       }
       
     </script>

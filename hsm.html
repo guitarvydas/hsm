@@ -25,17 +25,10 @@
     <br>
     <p id="status" > READY </p>
     <br>
-    <br>
-    <br>
 
     <p>lisp:</p>
-    <textarea id="lisp" rows="7" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
+    <textarea id="lisp" rows="17" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
     </textarea>
-    <br>
-    <br>
-    <p id="status" > READY </p>
-    <br>
-    <br>
     <br>
 
     <!-- Ohm-JS -->
@@ -113,14 +106,14 @@ nameRest [ c ] = ‛«c»’
             const lispfmt = String.raw`
 HSM {
 Machine [ kmachine name lb Entry? State+ Exit? rb ] = ‛«kmachine»«name»«lb»«Entry»«State»«Exit»«rb»’
-State [ kstate name lb Entry? Transition+ Delegate? Exit? rb ] = ‛«kstate»«name»«lb»«Entry»«Transition»«Delegate»«Exit»«rb»’
+State [ kstate name lb Entry? Transition+ Delegate? Exit? rb ] = ‛\n(state self '«name»\n«Entry»«Transition»«Delegate»«Exit»)’
 Transition [ kon name lb TransitionStatement+ rb ] = ‛«kon»«name»«lb»«TransitionStatement»«rb»’
-Delegate [ kdelegate name ] = ‛«kdelegate»«name»’
+Delegate [ kdelegate name ] = ‛\n(delegate self '«name»)’
 Entry [ kenter lb Statement+ rb ] = ‛«kenter»«lb»«Statement»«rb»’
 Exit [ kexit lb Statement+ rb ] = ‛«kexit»«lb»«Statement»«rb»’
-TransitionStatement_next [ knext name ] = ‛«knext»«name»’
+TransitionStatement_next [ knext name ] = ‛\n(next self '«name»)’
 TransitionStatement_statement [ Statement ] = ‛«Statement»’
-Statement_send [ ksend name verbatim ] =  ‛«ksend»«name»«verbatim»’
+Statement_send [ ksend name verbatim ] =  ‛\n(send self «name» «verbatim»)’
 Statement_verbatim [ verbatim ] = ‛«verbatim»’
 
 verbatim [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’

@@ -1,4 +1,6 @@
-(defparameter *root* (format nil "~aquicklisp/local-projects/hsm/lisp/" (cd)))
+(proclaim '(optimize (debug 3) (safety 3) (speed 0)))
+	  
+(Defparameter *root* (format nil "~aquicklisp/local-projects/hsm/lisp/" (cd)))
 
 (defun rooted (s)
   (format nil "~a~a" *root* s))

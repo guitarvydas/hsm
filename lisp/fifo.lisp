@@ -15,3 +15,6 @@
   (let ((item (first (last (lis self)))))
     (setf (lis self) (butlast (lis self)))
     item))
+
+(defmethod as-list ((self FIFO))
+  (lis self))

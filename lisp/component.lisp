@@ -13,7 +13,7 @@
   (enqueue (inputq self) message))
 
 (defmethod outputs ((self Component))
-  (outputq self))
+  (as-list (outputq self)))
 
 (defmethod is-ready ((self Component))
   (> (len (inputq self)) 0))

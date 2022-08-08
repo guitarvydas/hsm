@@ -39,15 +39,13 @@
     (route self message net)))
 
 (defmethod step-any-child ((self Container))
-  (let ((result nil))
     (mapc #'(lambda (child)
-	      (cond ((not result)
-		     (let ((child-acted (step1 child)))
-		       (cond (child-acted
-			      (route-child-outputs self child)
-			      (setf result t))
-			     (t))))))
-	  (children self))))
+              (let ((child-acted (step1 child)))
+                (if child-acted
+                    (progn
+                      (route-child-outputs self child)
+                      (return-from step-any-child t)))))
+	  (children self)))
 
 (defmethod enter ((self Container))
   (setf (state self) (lookup-state self "default")))
@@ -81,7 +79,7 @@
 	(t)))
 
 (defmethod route-child-outputs ((self Container) child)
-  (let ((outputs (output-queue child)))
+  (let ((outputs (outputs child)))
     (clear-outputs child)
     (mapc #'(lambda (message)
 	      (let ((net (find-net self child (port message))))

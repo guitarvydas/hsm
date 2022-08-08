@@ -41,7 +41,8 @@
   (enter-default self))
 
 (defmethod delegate ((self HSM) message)
-  (cond ((sub-machine self) (funcall (sub-machine self) message))
+  (cond ((sub-machine self) 
+         (handle (sub-machine self) message))
         (t)))
 
 (defmethod maybe-create-sub-machines ((self HSM))

@@ -39,6 +39,12 @@ class HSM (Leaf):
         self.state = self.defaultState
         self.enter ()
 
+    def delegate (self, message):
+        if (self.state ["sub"]):
+            return self.state ["sub"].handle (message)
+        else:
+            return False
+
 class SubHSM (HSM):
     def __init__ (self, parent, instanceName):
         self.parent = parent

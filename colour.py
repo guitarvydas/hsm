@@ -12,7 +12,7 @@ class Colour (SubHSM):
         if ('colour' == message.port):
             self.next (self.states ["green"])
             return True
-        elif self.state.sub ["handle"] (message):
+        elif self.state.sub.handle (message):
             return True
         else:
             self.unhandledMessage (message)
@@ -27,7 +27,7 @@ class Colour (SubHSM):
         if ('colour' == message.port):
             self.next (self.states ["red"])
             return True
-        elif self.state.sub ["handle"] (message):
+        elif self.delegate (message):
             return True
         else:
             self.unhandledMessage (message)
@@ -43,7 +43,7 @@ class Colour (SubHSM):
         if ('colour' == message.port):
             self.next (self.states ["yellow"])
             return True
-        elif self.state.sub.handle (message):
+        elif self.delegate (message):
             return True
         else:
             self.unhandledMessage (message)

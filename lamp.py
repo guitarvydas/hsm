@@ -12,6 +12,8 @@ class Lamp (HSM):
         if ('pwr' == message.port):
             self.next (self.states ["on"])
             return True
+        elif self.delegate (message):
+            return True
         else:
             self.unhandledMessage (message)
         return False
@@ -28,7 +30,7 @@ class Lamp (HSM):
             self.send ('power', True, message)
             self.next (self.states ["off"])
             return True
-        elif self.state ["sub"].handle (message):
+        elif self.delegate (message):
             return True
         else:
             self.unhandledMessage (message)

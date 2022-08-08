@@ -6,8 +6,7 @@
 (defmethod step1 ((self Leaf))
   (cond ((is-ready self)
 	 (let ((m (dequeue-input self)))
-	   (handle self m)
-	   t))
+	   (handle self m)))
 	(t nil)))
 
 (defmethod run ((self Leaf))

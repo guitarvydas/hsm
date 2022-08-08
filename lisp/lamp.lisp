@@ -15,10 +15,14 @@
                  :enter (lambda (self) (declare (ignore self)))
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
+(let ((debug nil))
+(format *standard-output* "ls-on begin debug~%")                                  
                            (cond ((string= "pwr" (port message))
                                   (next self ls-off))
-                                 ((delegate self message) t)
-                                 (t (unhandled-message self message))))))
+                                 ((setf debug (delegate self message)) t)
+                                 (t
+(format *standard-output* "ls-on debug=~a~%" debug)                                  
+                                  (unhandled-message self message)))))))
 
 (defclass Lamp (HSM)
   ()

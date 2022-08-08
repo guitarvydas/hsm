@@ -24,7 +24,9 @@
 
 (defmethod handle ((self HSM) message)
   (format *standard-output* "handle ~a ~a~%" (port message) self)
-  (funcall (fhandle (state self)) self message))
+  (let ((v (funcall (fhandle (state self)) self message)))
+    (format *standard-output* "handle returns ~a ~a ~a~%" v (port message) self)
+    v))
 
 (defmethod enter-default ((self HSM))
   (setf (state self) (default-state self))
@@ -43,7 +45,11 @@
 
 (defmethod delegate ((self HSM) message)
   (cond ((sub-machine self) 
-         (handle (sub-machine self) message))
+(let ((debug
+       (handle (sub-machine self) message))
+      )
+  (format *standard-output* "delegate debug=~a~%" debug)
+  debug))
         (t nil)))
 
 (defmethod maybe-create-sub-machines ((self HSM))

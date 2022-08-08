@@ -36,7 +36,8 @@
 ;; internal
 (defmethod handle ((self Container) message)
   (let ((net (find-net self self (port message))))
-    (route self message net)))
+    (route self message net)
+    t))
 
 (defmethod step-any-child ((self Container))
     (mapc #'(lambda (child)
@@ -45,7 +46,8 @@
                     (progn
                       (route-child-outputs self child)
                       (return-from step-any-child t)))))
-	  (children self)))
+	  (children self))
+    nil)
 
 (defmethod enter ((self Container))
   (setf (state self) (lookup-state self "default")))

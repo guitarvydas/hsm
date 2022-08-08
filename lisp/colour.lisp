@@ -4,7 +4,7 @@
                  :enter (lambda (self) (declare (ignore self)))
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
-(format *standard-output* "  colour yellow handling ~a ~a~%" message self)
+(format *standard-output* "  colour yellow handling ~a ~a~%" (port message) self)
                            (cond ((string= "colour" (port message))
                                   (next self clr-green))
                                  ((delegate self message) t)

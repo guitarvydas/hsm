@@ -5,7 +5,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "brightness" (port message))
-                                  (next self 'br-mid))
+                                  (next self br-mid))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
 
@@ -16,7 +16,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "brightness" (port message))
-                                  (next self 'br-high))
+                                  (next self br-high))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
 
@@ -27,7 +27,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "brightness" (port message))
-                                  (next self 'br-dim))
+                                  (next self br-dim))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
 

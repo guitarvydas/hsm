@@ -5,7 +5,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "colour" (port message))
-                                  (next self 'br-mid))
+                                  (next self clr-green))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
 
@@ -16,8 +16,8 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "colour" (port message))
-                                  (next self 'br-high))
-                                 ((delegate 'self message))
+                                  (next self clr-red))
+                                 ((delegate self message))
                                  (t (unhandled-message self message))))))
 
 (defparameter clr-red
@@ -27,7 +27,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "colour" (port message))
-                                  (next self 'br-dim))
+                                  (next self clr-yellow))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
 

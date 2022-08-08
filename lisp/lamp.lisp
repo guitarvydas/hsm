@@ -5,7 +5,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "pwr" (port message))
-                                  (next self 'ls-on))
+                                  (next self ls-on))
                                  (t (unhandled-message self message))))))
 
 (defparameter ls-on 
@@ -15,7 +15,7 @@
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "pwr" (port message))
-                                  (next self 'ls-off))
+                                  (next self ls-off))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
 

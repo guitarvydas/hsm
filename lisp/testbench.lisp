@@ -1,5 +1,7 @@
 (defclass TestBench (Container)
-  ())
+  ()
+  (:default-initargs
+   :parent nil))
 
 (defmethod initialize-instance :after ((self TestBench) &key &allow-other-keys)
   (let ((lamp-tester (make-instance 'Lamp-Tester :parent self :name "lamp-tester"))
@@ -10,7 +12,7 @@
 	  (net3 (make-instance 'Net :name "n3" :receivers '((lamp "brightness"))))
 	  (net4 (make-instance 'Net :name "n4" :receivers '((lamp "colour"))))
 	  (net5 (make-instance 'Net :name "n5" :receivers '((self "lamp-state")))))
-      (setf (nets self) (list net1 net2 net3 net4 net5 net6))
+      (setf (nets self) (list net1 net2 net3 net4 net5))
       (let ((conn1 (make-instance 'Connection :instance self :port "start" :net net1))
 	    (conn2 (make-instance 'Connection :instance lamp-tester :port "pwr" :net net2))	    
 	    (conn3 (make-instance 'Connection :instance lamp-tester :port "brightness" :net net3))

@@ -12,6 +12,7 @@
 (load (rooted "leaf.lisp"))
 (load (rooted "hsm.lisp"))
 (load (rooted "container.lisp"))
+
 (load (rooted "lamp.lisp"))
 (load (rooted "brightness.lisp"))
 (load (rooted "colour.lisp"))

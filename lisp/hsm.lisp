@@ -2,8 +2,8 @@
   ((states :accessor states :initarg :states)
    (state :accessor state)
    (default-state :accessor default-state :initarg :default-state)
-   (sub :accessor sub :initform nil)
-   (sub-class :accessor sub-class :initarg :sub-class :initform nil)))
+   (sub-machine :accessor sub-machine :initform nil)
+   (sub-machine-class :accessor sub-machine-class :initarg :sub-machine-class :initform nil)))
 
 (defmethod enter ((self HSM))
   (cond ((sub-class self)
@@ -32,6 +32,11 @@
 
 (defmethod delegate ((self HSM) message)
   (cond ((sub self) (funcall (sub self) message))
+        (t)))
+
+(defmethod maybe-create-sub-machines ((self HSM))
+  (cond ((sub-machine-class self)
+         (setf (sub-machine self) (make-instance (sub-machine-class self))))
         (t)))
 
 (defclass SubHSM (HSM) ())

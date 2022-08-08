@@ -1,4 +1,4 @@
-(defclass Container (Component)
+(defclass Container (HSM)
   ((children :accessor children)
    (nets :accessor nets)
    (connections :accessor connections)))
@@ -50,7 +50,7 @@
 	  (children self))))
 
 (defmethod enter ((self Container))
-  (setf (state self) (lookup-state (states self) "default")))
+  (setf (state self) (lookup-state self "default")))
 
 (defmethod noop ((self Container))
   )
@@ -91,7 +91,7 @@
 
 (defmethod initialize-container-default ((self Container))
   (let ((default (make-instance 'State :enter #'noop :exit #'noop :handle #'handle :sub nil)))
-    (setf (states self) (list default))
+    (setf (states self) (list ("default" . default)))
     (setf (default-state self) default)
     (setf (state self) default)
     (enter self)))

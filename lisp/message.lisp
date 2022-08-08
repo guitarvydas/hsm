@@ -8,7 +8,7 @@
 (defclass Message (BaseMessage)
   ((sender :accessor sender :initarg :sender)
    (port :accessor port :initarg :port)
-   (trail :accessor trail :initarg :trail)
+   (trail :accessor trail :initarg :trail :initform nil)
    (state :accessor state :initform "?")))
 
 (defmethod update-state ((self Message) new-state)

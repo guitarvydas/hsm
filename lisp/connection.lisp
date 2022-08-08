@@ -5,4 +5,4 @@
 
 (defmethod has-sender ((self Connection) instance port-name)
   (and (eq (instance self) instance)
-       (eq (port self) port-name)))
+       (string= (port self) port-name)))

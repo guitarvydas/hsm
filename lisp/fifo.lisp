@@ -12,6 +12,6 @@
 
 (defmethod dequeue ((self FIFO))
   ;; optimize later
-  (let ((item (last (lis self))))
+  (let ((item (first (last (lis self)))))
     (setf (lis self) (butlast (lis self)))
     item))

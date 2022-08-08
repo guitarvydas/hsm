@@ -1,5 +1,5 @@
 (defclass FIFO ()
-  ((lis :accessor lis)))
+  ((lis :accessor lis :initform nil)))
 
 (defmethod len ((self FIFO))
   (length (lis self)))

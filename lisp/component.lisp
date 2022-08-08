@@ -16,7 +16,7 @@
   (outputq self))
 
 (defmethod is-ready ((self Component))
-  (> (length (inputq self)) 0))
+  (> (len (inputq self)) 0))
 
 (defmethod name ((self Component))
   (cond ((null (parent self))

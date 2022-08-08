@@ -17,4 +17,4 @@
     item))
 
 (defmethod as-list ((self FIFO))
-  (lis self))
+  (reverse (lis self)))

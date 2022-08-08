@@ -87,15 +87,11 @@
 	  outputs)))
 
 (defmethod initialize-container-default ((self Container))
-  (let ((default (make-instance 'State :enter #'noop :exit #'noop :handle #'handle :sub nil)))
-    (setf (states self) `(("default" . ,default)))
+  (let ((default (make-instance 'State :name "default" :enter #'noop :exit #'noop :handle #'handle :sub nil)))
+    (setf (states self) (list default))
     (setf (default-state self) default)
     (setf (state self) default)
     (enter self)))
-
-(defmethod lookup-state ((self Container) state-name)
-  (assoc state-name (states self) :test 'equal))
-
 
 (defmethod initialize-instance :after ((self Container) &key &allow-other-keys)
   (initialize-container-default self))

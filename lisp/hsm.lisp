@@ -6,8 +6,8 @@
    (sub-machine-class :accessor sub-machine-class :initarg :sub-machine-class :initform nil)))
 
 (defmethod enter ((self HSM))
-  (cond ((sub-class self)
-         (setf (sub self) (make-instance (sub-class self))))
+  (cond ((sub-machine-class self)
+         (setf (sub-machine self) (make-instance (sub-machine-class self))))
         (t))
   (funcall (enter (state self)) self))
 
@@ -31,7 +31,7 @@
   (enter-default self))
 
 (defmethod delegate ((self HSM) message)
-  (cond ((sub self) (funcall (sub self) message))
+  (cond ((sub-machine self) (funcall (sub-machine self) message))
         (t)))
 
 (defmethod maybe-create-sub-machines ((self HSM))

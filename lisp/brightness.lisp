@@ -1,10 +1,3 @@
-(defclass Brightness (HSM)
-  ()
-  (:default-initargs
-   :states '(("dim" . br-dim) ("mid" . br-mid) ("high" .  br-high))
-   :default-state 'br-dim
-   :sub-machine-class 'Colour))
-
 (defparameter br-dim
   (make-instance 'State
                  :enter (lambda (self) (maybe-create-sub-machines self))
@@ -34,6 +27,14 @@
                                   (next self 'br-dim))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
+
+
+(defclass Brightness (HSM)
+  ()
+  (:default-initargs
+   :states '(("dim" . br-dim) ("mid" . br-mid) ("high" .  br-high))
+   :default-state br-dim
+   :sub-machine-class 'Colour))
 
 (defmethod initialize-instance :after ((self Brightness) &key &allow-other-keys)
   (enter-default self))

@@ -22,5 +22,8 @@
   (:default-initargs
    :states `(("off" . ,ls-off) ("on" . ,ls-on))
    :sub-machine-class 'Brightness
-   :default-state 'ls-off))
+   :default-state ls-off))
+
+(Defmethod initialize-instance :after ((self Lamp) &key &allow-other-keys)
+  (enter-default self))
 

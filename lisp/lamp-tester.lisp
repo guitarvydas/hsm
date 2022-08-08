@@ -16,4 +16,6 @@
    :states `(("default" . ,lt-default))
    :default-state lt-default))
 
+(defmethod initialize-instance :after ((self Lamp-Tester) &key &allow-other-keys)
+  (enter-default self))
 

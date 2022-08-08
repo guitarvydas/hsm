@@ -41,7 +41,7 @@
       (enqueue (outputq self) m))))
 
 (defmethod unhandled-message ((self Component) message)
-  (error (format nil "unhandled message in ~a ~a" (name self) message)))
+  (error (format nil "unhandled message in ~a ~a" (name self) (port message))))
 
 (defmethod output-queue ((self Component))
   (outputq self))

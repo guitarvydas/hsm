@@ -70,8 +70,7 @@
 	   (mapc #'(lambda (receiver-tuple)
 		     (let ((receiver (first receiver-tuple))
 			   (port (second receiver-tuple)))
-                       (declare (ignore port))
-		       (let ((m (make-instance 'Message :sender (sender message) :port (value message) :trail (trail message))))
+		       (let ((m (make-instance 'Message :sender (sender message) :port port :data (value message) :trail (trail message))))
 			 (cond ((eq receiver self)
 				(update-state m "output")
 				(enqueue-output receiver m))
@@ -91,7 +90,7 @@
 
 (defmethod initialize-container-default ((self Container))
   (let ((default (make-instance 'State :enter #'noop :exit #'noop :handle #'handle :sub nil)))
-    (setf (states self) '(("default" . default)))
+    (setf (states self) `(("default" . ,default)))
     (setf (default-state self) default)
     (setf (state self) default)
     (enter self)))

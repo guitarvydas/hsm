@@ -47,7 +47,7 @@
 
 (defmethod maybe-create-sub-machines ((self HSM))
   (cond ((sub-machine-class self)
-         (setf (sub-machine self) (make-instance (sub-machine-class self))))
+         (setf (sub-machine self) (make-instance (sub-machine-class self) :parent (parent self))))
         (t)))
 
 (defclass SubHSM (HSM) ())

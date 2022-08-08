@@ -1,8 +1,8 @@
 (defparameter br-dim
   (make-instance 'State
                  :name "dim"
-                 :enter (lambda (self) (declare (ignore self)))
-                 :exit (lambda (self) (declare (ignore self)))
+                 :enter (lambda (self) (send self "state" "dim" nil))
+                 :exit (lambda (self) (send self "state" "x-dim" nil))
                  :handle (lambda (self message)
                            (cond ((string= "brightness" (port message))
                                   (next self br-mid))

@@ -1,10 +1,3 @@
-(defclass Lamp (HSM)
-  ()
-  (:default-initargs
-   :states '(("off" . ls-off) ("on" . ls-on))
-   :sub-machine-class 'Brightness
-   :default-state 'ls-off))
-
 (defparameter ls-off 
   (make-instance 'State
                  :enter (lambda (self) (maybe-create-sub-machines self))
@@ -23,3 +16,11 @@
                                   (next self 'ls-off))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
+
+(defclass Lamp (HSM)
+  ()
+  (:default-initargs
+   :states `(("off" . ,ls-off) ("on" . ,ls-on))
+   :sub-machine-class 'Brightness
+   :default-state 'ls-off))
+

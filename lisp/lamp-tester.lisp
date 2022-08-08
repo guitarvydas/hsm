@@ -1,9 +1,3 @@
-(defclass Lamp-Tester (HSM)
-  ()
-  (:default-initargs
-   :states '(("default" . lt-default))
-   :default-state lt-default))
-
 (defparameter lt-default
   (make-instance 'State
 		 :enter (lambda (self) (declare (ignore self)))
@@ -14,4 +8,12 @@
 				  (send self "brightness" t nil)
 				  (send self "colour" t nil))
 				 (t (unhandled-message self message))))))
+
+
+(defclass Lamp-Tester (HSM)
+  ()
+  (:default-initargs
+   :states `(("default" . ,lt-default))
+   :default-state lt-default))
+
 

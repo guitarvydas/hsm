@@ -58,7 +58,7 @@
 (defmethod find-net ((self Container) instance port-name)
   (mapc #'(lambda (connection)
 	    (cond ((has-sender connection instance port-name)
-		   (net connection))
+		   (return-from find-net (net connection)))
 		  (t)))
 	(connections self))
   (error (format nil "internal error: no connection for ~a/~a" (name instance) port-name)))

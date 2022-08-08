@@ -1,7 +1,7 @@
 (defclass Brightness (HSM)
   ()
   (:default-initargs
-   :states '(br-dim br-mid br-high)
+   :states '(("dim" . br-dim) ("mid" . br-mid) ("high" .  br-high))
    :default-state 'br-dim
    :sub-machine-class 'Colour))
 

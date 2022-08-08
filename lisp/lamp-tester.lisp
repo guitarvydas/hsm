@@ -15,5 +15,3 @@
 				  (send self "colour" t nil))
 				 (t (unhandled-message self message))))))
 
-(defmethod initialize-instance :after ((self Lamp-tester) &key &allow-other-keys)
-  (call-next-method))

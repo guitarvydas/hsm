@@ -91,7 +91,7 @@
 
 (defmethod initialize-container-default ((self Container))
   (let ((default (make-instance 'State :enter #'noop :exit #'noop :handle #'handle :sub nil)))
-    (setf (states self) (list ("default" . default)))
+    (setf (states self) '(("default" . default)))
     (setf (default-state self) default)
     (setf (state self) default)
     (enter self)))

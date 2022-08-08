@@ -23,6 +23,3 @@
                                   (next self 'ls-off))
                                  ((delegate self message))
                                  (t (unhandled-message self message))))))
-
-(defmethod initialize-instance :after ((self Lamp) &key &allow-other-keys)
-  (call-next-method))

@@ -1,7 +1,7 @@
 (defclass Colour (HSM)
   ()
   (:default-initargs
-   :states '(clr-yellow clr-green clr-red)
+   :states '(("yellow" . clr-yellow) ("green" . clr-green) ("red" .  clr-red))
    :default-state 'br-dim))
 
 (defparameter cl-yellow

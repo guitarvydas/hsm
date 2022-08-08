@@ -16,25 +16,26 @@
       (lookup-state-helper (rest state-list) state-name))))
 
 (defmethod enter ((self HSM))
-  (cond ((sub-machine-class self)
-         (setf (sub-machine self) (make-instance (sub-machine-class self))))
-        (t))
+  (maybe-create-sub-machines self)
   (funcall (enter (state self)) self))
 
 (defmethod exit ((self HSM))
   (funcall (exit (state self)) self))
 
 (defmethod handle ((self HSM) message)
+  (format *standard-output* "handle ~a ~a~%" (port message) self)
   (funcall (fhandle (state self)) self message))
 
 (defmethod enter-default ((self HSM))
   (setf (state self) (default-state self))
-  (enter self))
+  (enter self)
+  t)
 
 (defmethod next ((self HSM) next-state)
   (exit self)
   (setf (state self) next-state)
-  (enter self))
+  (enter self)
+  t)
 
 (defmethod reset ((self HSM))
   (exit self)
@@ -43,7 +44,7 @@
 (defmethod delegate ((self HSM) message)
   (cond ((sub-machine self) 
          (handle (sub-machine self) message))
-        (t)))
+        (t nil)))
 
 (defmethod maybe-create-sub-machines ((self HSM))
   (cond ((sub-machine-class self)

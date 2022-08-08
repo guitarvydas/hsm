@@ -1,38 +1,40 @@
 (defparameter br-dim
   (make-instance 'State
                  :name "dim"
-                 :enter (lambda (self) (maybe-create-sub-machines self))
+                 :enter (lambda (self) (declare (ignore self)))
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
+(format *standard-output* " brightness dim handling ~a ~a~%" message self)
                            (cond ((string= "brightness" (port message))
                                   (next self br-mid))
-                                 ((delegate self message))
+                                 ((delegate self message) t)
                                  (t (unhandled-message self message))))))
 
 (defparameter br-mid
   (make-instance 'State
                  :name "mid"
-                 :enter (lambda (self) (maybe-create-sub-machines self))
+                 :enter (lambda (self) (declare (ignore self)))
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
+(format *standard-output* " brightness mid handling ~a ~a~%" message self)
                            (cond ((string= "brightness" (port message))
                                   (next self br-high))
-                                 ((delegate self message))
+                                 ((delegate self message) t)
                                  (t (unhandled-message self message))))))
 
 (defparameter br-high
   (make-instance 'State
                  :name "high"
-                 :enter (lambda (self) (maybe-create-sub-machines self))
+                 :enter (lambda (self) (declare (ignore self)))
                  :exit (lambda (self) (declare (ignore self)))
                  :handle (lambda (self message)
                            (cond ((string= "brightness" (port message))
                                   (next self br-dim))
-                                 ((delegate self message))
+                                 ((delegate self message) t)
                                  (t (unhandled-message self message))))))
 
 
-(defclass Brightness (HSM)
+(defclass Brightness (SubHSM)
   ()
   (:default-initargs
    :states (list br-dim br-mid br-high)

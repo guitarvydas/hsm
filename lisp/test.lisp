@@ -4,4 +4,4 @@
       (inject tb m)
       (run tb)
       (let ((outputs (outputs tb)))
-	(format *standard-output* "~a~%" outputs)))))
+	(format *standard-output* "outputs: ~a~%" outputs)))))

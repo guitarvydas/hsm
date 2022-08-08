@@ -13,3 +13,6 @@
 
 (defmethod update-state ((self Message) new-state)
   (setf (state self) new-state))
+
+(defmethod print-object ((self Message) stream)
+  (format stream "<~a: ~a>" (port self) (data self)))

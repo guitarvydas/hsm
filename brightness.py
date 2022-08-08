@@ -13,7 +13,7 @@ class Brightness (SubHSM):
         if ('brightness' == message.port):
             self.next (self.states ["mid"])
             return True
-        elif self.state ["sub"].handle (message):
+        elif self.delegate (message):
             return True
         else:
             self.unhandledMessage (message)
@@ -29,7 +29,7 @@ class Brightness (SubHSM):
         if ('brightness' == message.port):
             self.next (self.states ["high"])
             return True
-        elif self.state ["sub"].handle (message):
+        elif self.delegate (message):
             return True
         else:
             self.unhandledMessage (message)
@@ -45,7 +45,7 @@ class Brightness (SubHSM):
         if ('brightness' == message.port):
             self.next (self.states ["dim"])
             return True
-        elif self.state ["sub"].handle (message):
+        elif self.delegate (message):
             return True
         else:
             self.unhandledMessage (message)

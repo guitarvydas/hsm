@@ -12,6 +12,8 @@ class Lamp (HSM):
         if ('pwr' == message.port):
             self.next (self.states ["on"])
             return True
+        elif self.delegate (message):
+            return True
         else:
             self.unhandledMessage (message)
         return False

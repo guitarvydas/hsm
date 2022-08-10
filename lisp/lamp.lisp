@@ -1,10 +1,9 @@
 (defparameter ls-off 
   (make-instance 'State
                  :name "off"
-                 :enter (lambda (self) (declare (ignore self)))
-                 :exit (lambda (self) (declare (ignore self)))
+                 :enter (lambda (self) (send self "state" "OFF" nil))
+                 :exit (lambda (self) (send self "state" "x-OFF" nil))
                  :handle (lambda (self message)
-                           (send self "state" "off" nil)
                            (cond ((string= "pwr" (port message))
                                   (next self ls-on))
                                  ((delegate self message) t)
@@ -13,10 +12,9 @@
 (defparameter ls-on 
   (make-instance 'State
                  :name "on"
-                 :enter (lambda (self) (declare (ignore self)))
-                 :exit (lambda (self) (declare (ignore self)))
+                 :enter (lambda (self) (send self "state" "ON" nil))
+                 :exit (lambda (self) (send self "state" "x-ON" nil))
                  :handle (lambda (self message)
-                           (send self "state" "on" nil)
                            (cond ((string= "pwr" (port message))
                                   (next self ls-off))
                                  ((delegate self message) t)
@@ -30,6 +28,6 @@
    :sub-machine-class 'Brightness
    :default-state ls-off))
 
-(Defmethod initialize-instance :after ((self Lamp) &key &allow-other-keys)
+(defmethod initialize-instance :after ((self Lamp) &key &allow-other-keys)
   (enter-default self))
 

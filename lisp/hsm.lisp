@@ -2,8 +2,8 @@
   ((states :accessor states :initarg :states)
    (state :accessor state)
    (default-state :accessor default-state :initarg :default-state)
-   (sub-machine :accessor sub-machine :initform nil)
-   (sub-machine-class :accessor sub-machine-class :initarg :sub-machine-class :initform nil)))
+   (machine-enter :accessor machine-enter :initarg :machine-enter :initform (lambda (self) (declare (ignore self))))
+   (machine-exit :accessor machine-exit :initarg :machine-exit :initform (lambda (self) (declare (ignore self))))))
 
 (defmethod lookup-state ((self HSM) state-name)
   (lookup-state-helper (states self) state-name))
@@ -11,19 +11,20 @@
 (defun lookup-state-helper (state-list state-name)
   (if (null state-list)
       nil
-    (if (string= state-name (name (first state-list)))
-        (first state-list)
-      (lookup-state-helper (rest state-list) state-name))))
+      (if (string= state-name (name (first state-list)))
+          (first state-list)
+	  (lookup-state-helper (rest state-list) state-name))))
 
 (defmethod enter ((self HSM))
-  (maybe-create-sub-machines self)
-  (funcall (enter (state self)) self))
+  (funcall (machine-enter self) self)
+  (enter (state self) self))
 
 (defmethod exit ((self HSM))
-  (funcall (exit (state self)) self))
+  (exit (state self) self)
+  (funcall (machine-exit self) self))
 
 (defmethod handle ((self HSM) message)
-  (funcall (fhandle (state self)) self message))
+  (handle (state self) self message))
 
 (defmethod enter-default ((self HSM))
   (setf (state self) (default-state self))

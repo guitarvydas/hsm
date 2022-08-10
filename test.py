@@ -1,7 +1,6 @@
-from testbench import TestBench
+from lamp import Lamp
 from message import Message
 
-tb = TestBench (None, 'testbench')
-tb.inject (Message (tb, 'start', True, None))
-tb.run ()
-print (tb.outputs ())
+l = Lamp (None, 'lamp')
+l.inject (Message (l, 'pwr', True, None))
+          

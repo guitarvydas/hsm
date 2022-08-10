@@ -6,8 +6,9 @@
 		 :handle (lambda (self message)
 			   (cond ((string= "start" (port message))
 				  (send self "pwr" t nil)
-				  (send self "brightness" t nil)
-				  (send self "colour" t nil))
+				  (send self "pwr" t nil)
+#+nil				  (send self "brightness" t nil)
+#+nil				  (send self "colour" t nil))
                                  ((delegate self message) t)
 				 (t (unhandled-message self message))))))
 

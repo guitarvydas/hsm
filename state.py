@@ -13,7 +13,7 @@ class State:
     
     def enter (self):
         if self._subMachineClass:
-            self._subMachine = self._subMachineClass (self, f'[{self._subMachineClass}]')
+            self._subMachine = self._subMachineClass (self, f'{self._subMachineClass.__name__}')
         self._enter ()
         
     def exit (self):
@@ -27,12 +27,9 @@ class State:
             r = self._subMachine.handle (message)
         return r
 
-    def baseName (self):
+    def rawName (self):
         return self._name
 
     def name (self):
-        if (self._subMachine == None):
-            return self._name
-        else:
-            return f'{self._subMachine.name ():self._name}'
-        
+        return f'[{self.rawName ()}]'
+

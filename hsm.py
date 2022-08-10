@@ -12,10 +12,10 @@ class HSM (Component):
         self.enterDefault ()
         
     def __repr__ (self):
-        return f'{self.name ()}:[{self._state.baseName ()}]'
+        return f'{self.name ()}:[{self._state.name ()}]'
 
     def enter (self):
-        print (f'entering {self.name ()} state {self._state.baseName ()}')
+        print (f'entering {self.name ()} state {self._state.name ()}')
         if self._machineEnter:
             self._machineEnter ()
         self._state.enter ()
@@ -35,7 +35,7 @@ class HSM (Component):
         self.enterDefault ()
 
     def handle (self, message):
-        print (f'handling {self.name ()} in state {self._state.baseName ()}')
+        print (f'handling {self.name ()} in state {self._state.name ()}')
         self._state.handle (message)
 
     def next (self, nextStateName):
@@ -64,7 +64,7 @@ class HSM (Component):
 # worker bees
     def lookupState (self, name):
         for state in self._states:
-            if state.baseName () == name:
+            if state.rawName () == name:
                 return state
         raise Exception (f'internal error: State /{name}/ not found in {self.name ()}') 
 

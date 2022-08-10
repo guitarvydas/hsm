@@ -1,3 +1,4 @@
+from email import message
 from message import Message
 from state import State
 from hsm import HSM
@@ -12,7 +13,7 @@ class Lamp (HSM):
 
 ## state OFF:
     def enter_OFF (self):
-        pass
+        self.send ('state', 'off', None)
 
     def exit_OFF (self):
         pass
@@ -29,7 +30,7 @@ class Lamp (HSM):
         
 ## state ON:
     def enter_ON (self):
-        pass
+        self.send ('state', 'on', None)
 
     def exit_ON (self):
         pass

@@ -56,4 +56,13 @@ class Component:
         return self._inputq.dequeue ()
     def dequeueOutput (self):
         return self._outputq.dequeue ()
-    
+
+    def send (self, portname, data, causingMessage):
+        if (causingMessage == None):
+            trail = [None]
+        else:
+            trail = [causingMessage, causingMessage.trail]
+        m = Message (self, portname, data, trail)
+        m.updateState ('output')
+        self._outputq.enqueue (m)
+

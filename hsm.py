@@ -72,3 +72,6 @@ class HSM (Component):
         if self.isReady ():
             m = self.dequeueInput ();
             self.handle (m)
+            return True
+        else:
+            return False

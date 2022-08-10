@@ -27,9 +27,12 @@ class State:
             r = self._subMachine.handle (message)
         return r
 
-    def rawName (self):
-        return self._name
+    def fullName (self):
+        subname = ''
+        if self._subMachine:
+            subname = ":" + self._subMachine.fullName ()
+        return f'{self._name}{subname}'
 
     def name (self):
-        return f'[{self.rawName ()}]'
+        return self._name
 

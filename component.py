@@ -3,10 +3,10 @@ from message import Message
 
 class Component:
     def __init__ (self, parent, name):
-        self.parent = parent
-        self.instanceName = name
-        self.inputq = FIFO ()
-        self.outputq = FIFO ()
+        self._parent = parent
+        self._instanceName = name
+        self._inputq = FIFO ()
+        self._outputq = FIFO ()
 
     # external to-be-implemented in descendent
     def run (self):
@@ -14,7 +14,7 @@ class Component:
     def step (self, message):
         raise Exception (f'step must be overridden for {self.name}')
     def inject (self, message):
-        self.inputq.enqueue (message)
+        self._inputq.enqueue (message)
     def isBusy (self):
         raise Exception ("isBusy not overridden")
 
@@ -33,27 +33,27 @@ class Component:
             resultdict2 [key] = fifo.asDeque ()
         return resultdict2
     def isReady (self):
-        return (not self.inputq.isEmpty ())
+        return (not self._inputq.isEmpty ())
     def name (self):
-        if (None == self.parent):
-            return self.instanceName
+        if (None == self._parent):
+            return self._instanceName
         else:
-            return f'{self.parent.name ()}/{self.instanceName}'
+            return f'{self.parent.name ()}/{self._instanceName}'
 
 
     # internal
     def clearOutputs (self):
-        self.outputq = FIFO ()
+        self._outputq = FIFO ()
 
     def enqueueInput (self, message):
-        self.inputq.enqueue (message)
+        self._inputq.enqueue (message)
         
     def enqueueOutput (self, message):
-        self.outputq.enqueue (message)
+        self._outputq.enqueue (message)
         
 
     def dequeueInput (self):
-        return self.inputq.dequeue ()
+        return self._inputq.dequeue ()
     def dequeueOutput (self):
-        return self.outputq.dequeue ()
+        return self._outputq.dequeue ()
     

@@ -1,0 +1,73 @@
+from email import message
+from message import Message
+from state import State
+from hsm import HSM
+
+class Brightness (HSM):
+
+    def enter (self):
+        super ().enter ()
+
+    def exit (self):
+        super ().exit ()
+
+## state DIM:
+    def enter_DIM (self):
+        self.send ('state', 'dim', None)
+
+    def exit_DIM (self):
+        pass
+
+    def handle_DIM (self, message):
+        if message.port == 'brightness': 
+            self.next ('mid')
+            return True
+        elif self.delegate (message):
+            return True
+        else:
+            self.unhandledMessage (message)
+            return False
+        
+## state MID:
+    def enter_MID (self):
+        self.send ('state', 'mid', None)
+
+    def exit_MID (self):
+        pass
+
+    def handle_MID (self, message):
+        if message.port == 'brightness': 
+            self.next ('high')
+            return True
+        elif self.delegate (message):
+            return True
+        else:
+            self.unhandledMessage (message)
+            return False
+        
+## state HIGH:
+    def enter_HIGH (self):
+        self.send ('state', 'hight', None)
+
+    def exit_HIGH (self):
+        pass
+
+    def handle_HIGH (self, message):
+        if message.port == 'brightness': 
+            self.next ('dim')
+            return True
+        elif self.delegate (message):
+            return True
+        else:
+            self.unhandledMessage (message)
+            return False
+        
+## create new instance
+    def __init__ (self, parent, instanceName):
+        dim = State (parent=parent, name='dim', enter=self.enter_DIM, exit=self.exit_DIM, handle=self.handle_DIM, subMachineClass=None)
+        mid = State (parent=parent, name='mid', enter=self.enter_MID, exit=self.exit_MID, handle=self.handle_MID, subMachineClass=None)
+        high = State (parent=parent, name='high', enter=self.enter_HIGH, exit=self.exit_HIGH, handle=self.handle_HIGH, subMachineClass=None)
+        stateList = [dim, mid, high]
+        super ().__init__ (parent, instanceName, 
+                           enter=None, exit=None,
+                           defaultStateName='dim', states=stateList)

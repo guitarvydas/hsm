@@ -3,6 +3,8 @@ from message import Message
 from state import State
 from hsm import HSM
 
+from brightness import Brightness
+
 class Lamp (HSM):
 
     def enter (self):
@@ -22,8 +24,6 @@ class Lamp (HSM):
         if message.port == 'pwr': 
             self.next ('on')
             return True
-        elif self.delegate (message):
-            return True
         else:
             self.unhandledMessage (message)
             return False
@@ -39,8 +39,6 @@ class Lamp (HSM):
         if message.port == 'pwr': 
             self.next ('off')
             return True
-        elif self.delegate (message):
-            return True
         else:
             self.unhandledMessage (message)
             return False
@@ -48,7 +46,7 @@ class Lamp (HSM):
 ## create new instance
     def __init__ (self, parent, instanceName):
         off = State (parent=parent, name='off', enter=self.enter_OFF, exit=self.exit_OFF, handle=self.handle_OFF, subMachineClass=None)
-        on = State (parent=parent, name='on', enter=self.enter_ON, exit=self.exit_ON, handle=self.handle_ON, subMachineClass=None)
+        on = State (parent=parent, name='on', enter=self.enter_ON, exit=self.exit_ON, handle=self.handle_ON, subMachineClass=Brightness)
         stateList = [off, on]
         super ().__init__ (parent, instanceName, 
                            enter=None, exit=None,

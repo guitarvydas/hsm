@@ -35,7 +35,7 @@ class HSM (Component):
         self.enterDefault ()
 
     def handle (self, message):
-        print (f'handling {self.name ()}')
+        print (f'handling {self.name ()} in state {self._state.baseName ()}')
         self._state.handle (message)
 
     def next (self, nextStateName):

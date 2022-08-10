@@ -23,7 +23,16 @@ class State:
 
     def handle (self, message):
         r = self._handle (message)
+        if (not r) and (self._subMachine):
+            r = self._subMachine.handle (message)
         return r
 
     def baseName (self):
         return self._name
+
+    def name (self):
+        if (self._subMachine == None):
+            return self._name
+        else:
+            return f'{self._subMachine.name ():self._name}'
+        

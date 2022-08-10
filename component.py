@@ -38,7 +38,7 @@ class Component:
         if (None == self._parent):
             return self._instanceName
         else:
-            return f'{self.parent.name ()}/{self._instanceName}'
+            return f'{self._parent.name ()}/{self._instanceName}'
 
 
     # internal

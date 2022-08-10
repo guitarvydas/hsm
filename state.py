@@ -22,7 +22,7 @@ class State:
         self._exit ()
 
     def handle (self, message):
-        r = self._handleFunction (self, message)
+        r = self._handle (message)
         return r
 
     def baseName (self):

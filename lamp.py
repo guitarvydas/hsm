@@ -18,7 +18,6 @@ class Lamp (HSM):
         pass
 
     def handle_OFF (self, message):
-        super ().handle (message)
         if message.port == 'pwr': 
             self.next ('on')
             return True
@@ -36,7 +35,6 @@ class Lamp (HSM):
         pass
 
     def handle_ON (self, message):
-        super ().handle (message)
         if message.port == 'pwr': 
             self.next ('off')
             return True

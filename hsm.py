@@ -15,7 +15,7 @@ class HSM (Component):
         return f'{self.name ()}:[{self._state.baseName ()}]'
 
     def enter (self):
-        print (f'entering {self.name ()}')
+        print (f'entering {self.name ()} state {self._state.baseName ()}')
         if self._machineEnter:
             self._machineEnter ()
         self._state.enter ()
@@ -34,18 +34,22 @@ class HSM (Component):
         self.exit ()
         self.enterDefault ()
 
-    def handle (self):
+    def handle (self, message):
         print (f'handling {self.name ()}')
-        self._state.handle ()
+        self._state.handle (message)
 
-    def next (self, nextState):
+    def next (self, nextStateName):
         self._state.exit ()
-        self._state = nextState
+        self._state = self.lookupState (nextStateName)
         self.enter ()
 
     def run (self):
-        while self.isBusy () or self.isReady ():
+        while self.isBusy ():
             self.step ()
+        while self.handleIfReady ():
+            while self.isBusy ():
+                self.step()
+
 
     # a raw state machine always completes a step when handle() is called
     # and is never busy
@@ -63,3 +67,8 @@ class HSM (Component):
             if state.baseName () == name:
                 return state
         raise Exception (f'internal error: State /{name}/ not found in {self.name ()}') 
+
+    def handleIfReady (self):
+        if self.isReady ():
+            m = self.dequeueInput ();
+            self.handle (m)

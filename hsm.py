@@ -42,7 +42,7 @@ class HSM (Component):
         self._state.handle (message)
 
     def next (self, nextStateName):
-        self._state.exit ()
+        self.exit ()
         self._state = self.lookupState (nextStateName)
         self.enter ()
 

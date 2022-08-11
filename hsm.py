@@ -14,17 +14,17 @@ class HSM (Component):
     def __repr__ (self):
         return f'{self._state.name ()}'
 
-    def baseName (self):
-        return f'{super ().baseName ()}[{self._state.fullName ()}]'
+    def name (self):
+        return f'{super ().name ()}[{self._state.name ()}]'
 
     def enter (self):
-        print (f'entering {self.baseName ()}')
+        print (f'entering {self.name ()}')
         if self._machineEnter:
             self._machineEnter ()
         self._state.enter ()
 
     def exit (self):
-        print (f'exiting {self.baseName ()}')
+        print (f'exiting {self.name ()}')
         self._state.exit ()
         if self._machineExit:
             self._machineExit ()
@@ -38,7 +38,7 @@ class HSM (Component):
         self.enterDefault ()
 
     def handle (self, message):
-        print (f'handling {self.baseName ()}')
+        print (f'handling {self.name ()}')
         self._state.handle (message)
 
     def next (self, nextStateName):

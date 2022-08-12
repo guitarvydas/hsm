@@ -13,10 +13,10 @@ class Brightness (HSMLayer):
 
 ## state DIM:
     def enter_DIM (self):
-        self.send ('state', 'dim', None)
+        self.send ('state', '<dim>', None)
 
     def exit_DIM (self):
-        pass
+        self.send ('state', '</dim>', None)
 
     def handle_DIM (self, message):
         if message.port == 'brightness': 
@@ -30,10 +30,10 @@ class Brightness (HSMLayer):
         
 ## state MID:
     def enter_MID (self):
-        self.send ('state', 'mid', None)
+        self.send ('state', '<mid>', None)
 
     def exit_MID (self):
-        pass
+        self.send ('state', '</mid>', None)
 
     def handle_MID (self, message):
         if message.port == 'brightness': 
@@ -47,10 +47,10 @@ class Brightness (HSMLayer):
         
 ## state HIGH:
     def enter_HIGH (self):
-        self.send ('state', 'hight', None)
+        self.send ('state', '<high>', None)
 
     def exit_HIGH (self):
-        pass
+        self.send ('state', '</high>', None)
 
     def handle_HIGH (self, message):
         if message.port == 'brightness': 

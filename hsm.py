@@ -18,13 +18,13 @@ class HSM (Component):
         return f'{super ().name ()}[{self._state.name ()}]'
 
     def enter (self):
-        print (f'entering {self.name ()}')
+        print (f'< {self.name ()} >')
         if self._machineEnter:
             self._machineEnter ()
         self._state.enter ()
 
     def exit (self):
-        print (f'exiting {self.name ()}')
+        print (f'</ {self.name ()} >')
         self._state.exit ()
         if self._machineExit:
             self._machineExit ()
@@ -38,7 +38,7 @@ class HSM (Component):
         self.enterDefault ()
 
     def handle (self, message):
-        print (f'handling {self.name ()}')
+        print (f'? {self.name ()}')
         self._state.handle (message)
 
     def next (self, nextStateName):

@@ -35,10 +35,10 @@ class Component:
     def isReady (self):
         return (not self._inputq.isEmpty ())
     def name (self):
-        if (None == self._parent):
-            return self.baseName ()
-        else:
-            return f'{self._parent.name ()}/{self._instanceName}'
+        parentname = ''
+        if self._parent:
+            parentname = self._parent.name () + '/'
+        return f'{parentname}{self._instanceName}'
 
     def baseName (self):
         return self._instanceName

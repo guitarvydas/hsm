@@ -1,6 +1,6 @@
 class State:
-    def __init__ (self, parent, name, enter, exit, handle, subMachineClass):
-        self._machine = parent
+    def __init__ (self, machine, name, enter, exit, handle, subMachineClass):
+        self._machine = machine
         self._name = name
         self._enter = enter
         self._exit = exit
@@ -9,7 +9,7 @@ class State:
         self._subMachine = None
 
     def __repr__ (self):
-        return self.name
+        return f'<state {self.name}>'
     
     def enter (self):
         if self._subMachineClass:
@@ -29,5 +29,7 @@ class State:
 
     def name (self):
         subname = ''
+        if self._subMachine:
+            subname = ':' + self._subMachine.name ()
         return f'{self._name}{subname}'
 

@@ -1,9 +1,9 @@
 from email import message
 from message import Message
 from state import State
-from hsm import HSM
+from hsmlayer import HSMLayer
 
-class Brightness (HSM):
+class Brightness (HSMLayer):
 
     def enter (self):
         super ().enter ()
@@ -63,11 +63,11 @@ class Brightness (HSM):
             return False
         
 ## create new instance
-    def __init__ (self, parent, instanceName):
-        dim = State (parent=parent, name='dim', enter=self.enter_DIM, exit=self.exit_DIM, handle=self.handle_DIM, subMachineClass=None)
-        mid = State (parent=parent, name='mid', enter=self.enter_MID, exit=self.exit_MID, handle=self.handle_MID, subMachineClass=None)
-        high = State (parent=parent, name='high', enter=self.enter_HIGH, exit=self.exit_HIGH, handle=self.handle_HIGH, subMachineClass=None)
+    def __init__ (self, tophsm, layerName):
+        dim = State (machine=self, name='dim', enter=self.enter_DIM, exit=self.exit_DIM, handle=self.handle_DIM, subMachineClass=None)
+        mid = State (machine=self, name='mid', enter=self.enter_MID, exit=self.exit_MID, handle=self.handle_MID, subMachineClass=None)
+        high = State (machine=self, name='high', enter=self.enter_HIGH, exit=self.exit_HIGH, handle=self.handle_HIGH, subMachineClass=None)
         stateList = [dim, mid, high]
-        super ().__init__ (parent, instanceName, 
+        super ().__init__ (tophsm, layerName, 
                            enter=None, exit=None,
                            defaultStateName='dim', states=stateList)

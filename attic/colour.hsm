@@ -1,0 +1,11 @@
+machine Colour {
+  state yellow {
+    on colour { next green }
+  }
+  state green {
+    on colour { next red }
+  }
+  state red {
+    on colour { next yellow }
+  }
+}

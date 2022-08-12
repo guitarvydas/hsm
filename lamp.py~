@@ -1,5 +1,0 @@
-class Lamp:
-    def f1 (self):
-        self.
-    def __init__ (self):
-        self

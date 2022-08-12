@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      textarea {
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>HSM Transpiler</h1>
+
+    <button onclick="generate ()">Generate</button>
+    <br>
+
+    <p>source:</p>
+    <textarea id="src" rows="7" cols="90" placeholder="src" style="background-color:oldlace;">
+    </textarea>
+
+
+    <p>identity:</p>
+    <textarea id="identity" rows="7" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
+    </textarea>
+    <br>
+    <br>
+    <p id="status" > READY </p>
+    <br>
+
+    <p>lisp:</p>
+    <textarea id="lisp" rows="17" cols="90" placeholder="transpiled"  readonly style="background-color:whitesmoke;">
+    </textarea>
+    <br>
+
+    <!-- Ohm-JS -->
+    <script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script>
+
+
+    <script src="../fmt-js/fmt-js.js"></script>
+    <script src="../fmt-js/transpile.js"></script>
+
+
+    <script>
+
+      const hsmsrc = String.raw`
+machine Lamp {
+  state OFF {
+    on pwr { next ON }
+  }
+  state ON {
+    on pwr {
+      send power ⟨True⟩
+      next OFF
+    }
+   delegate Brightness
+  }
+}
+`;
+      
+      const hsmgrammar = String.raw`
+HSM {
+Machine = "machine" name "{" Entry? State+ Exit? "}"
+State = "state" name "{" Entry? Transition+ Delegate? Exit?"}"
+Transition = "on" name "{" TransitionStatement+ "}"
+Delegate = "delegate" name
+Entry = "enter" "{" Statement+ "}"
+Exit = "exit" "{" Statement+ "}"
+TransitionStatement =
+  | "next" name -- next
+  | Statement -- statement
+Statement =  
+  | "send" name verbatim -- send
+  | verbatim    -- verbatim
+
+verbatim = "⟨" verbatimInnards+ "⟩"
+verbatimInnards = 
+  | "⟨" verbatimInnards+ "⟩" -- nested
+  | ~"⟨" ~"⟩" any     -- bottom
+name = nameFirst nameRest*
+nameFirst = letter
+nameRest = alnum | "_"
+}
+`;
+
+      const identityfmt = String.raw`
+HSM {
+Machine [ kmachine name lb Entry? State+ Exit? rb ] = ‛«kmachine»«name»«lb»«Entry»«State»«Exit»«rb»’
+State [ kstate name lb Entry? Transition+ Delegate? Exit? rb ] = ‛«kstate»«name»«lb»«Entry»«Transition»«Delegate»«Exit»«rb»’
+Transition [ kon name lb TransitionStatement+ rb ] = ‛«kon»«name»«lb»«TransitionStatement»«rb»’
+Delegate [ kdelegate name ] = ‛«kdelegate»«name»’
+Entry [ kenter lb Statement+ rb ] = ‛«kenter»«lb»«Statement»«rb»’
+Exit [ kexit lb Statement+ rb ] = ‛«kexit»«lb»«Statement»«rb»’
+TransitionStatement_next [ knext name ] = ‛«knext»«name»’
+TransitionStatement_statement [ Statement ] = ‛«Statement»’
+Statement_send [ ksend name verbatim ] =  ‛«ksend»«name»«verbatim»’
+Statement_verbatim [ verbatim ] = ‛«verbatim»’
+
+verbatim [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’
+verbatimInnards_nested [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’
+verbatimInnards_bottom [ any ] = ‛«any»’
+name [ nameFirst nameRest* ] = ‛«nameFirst»«nameRest»’
+nameFirst [ c ] = ‛«c»’
+nameRest [ c ] = ‛«c»’
+}
+`;
+
+            const lispfmt = String.raw`
+HSM {
+Machine [ kmachine name lb Entry? State+ Exit? rb ] = ‛«kmachine»«name»«lb»«Entry»«State»«Exit»«rb»’
+State [ kstate name lb Entry? Transition+ Delegate? Exit? rb ] = ‛\n(state self '«name»\n«Entry»«Transition»«Delegate»«Exit»)’
+Transition [ kon name lb TransitionStatement+ rb ] = ‛«kon»«name»«lb»«TransitionStatement»«rb»’
+Delegate [ kdelegate name ] = ‛\n(delegate self '«name»)’
+Entry [ kenter lb Statement+ rb ] = ‛«kenter»«lb»«Statement»«rb»’
+Exit [ kexit lb Statement+ rb ] = ‛«kexit»«lb»«Statement»«rb»’
+TransitionStatement_next [ knext name ] = ‛\n(next self '«name»)’
+TransitionStatement_statement [ Statement ] = ‛«Statement»’
+Statement_send [ ksend name verbatim ] =  ‛\n(send self «name» «verbatim»)’
+Statement_verbatim [ verbatim ] = ‛«verbatim»’
+
+verbatim [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’
+verbatimInnards_nested [ open verbatimInnards+ close ] =  ‛«open»«verbatimInnards»«close»’
+verbatimInnards_bottom [ any ] = ‛«any»’
+name [ nameFirst nameRest* ] = ‛«nameFirst»«nameRest»’
+nameFirst [ c ] = ‛«c»’
+nameRest [ c ] = ‛«c»’
+}
+`;
+
+      function displaySource (s) {
+	  document.getElementById('src').innerHTML = s;
+      }
+      
+      function generateHelper (field, src, grammarName, grammar, fmt) {
+	  [success, transpiled, errormessage] = transpile (src, grammarName, grammar, fmt);
+	  if (success) {
+	      document.getElementById(field).value = transpiled;
+	      document.getElementById('status').innerHTML = "OK";
+	      return true;
+	  } else {
+	      document.getElementById(field).value = transpiled;
+	      document.getElementById('status').innerHTML = "FAILED " + errormessage;
+	      return false;
+	  }
+      }
+
+      function generate () {
+	  displaySource (hsmsrc);
+	  generateHelper ('identity', hsmsrc, "HSM", hsmgrammar, identityfmt);
+	  generateHelper ('lisp', hsmsrc, "HSM", hsmgrammar, lispfmt);
+      }
+      
+    </script>
+  </body>
+</html>
+
+
+

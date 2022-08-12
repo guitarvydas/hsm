@@ -1,63 +1,64 @@
-from hsm import SubHSM
+from email import message
+from message import Message
+from state import State
+from hsmlayer import HSMLayer
 
-class Colour (SubHSM):
+class Colour (HSMLayer):
 
-        
+    def enter (self):
+        super ().enter ()
+
+    def exit (self):
+        super ().exit ()
+
+## state YELLOW:
     def enter_YELLOW (self):
-        self.send ('state', '↱ yellow', None)
-        self.state = self.states ["yellow"]
+        self.send ('state', '<yellow>', None)
+
     def exit_YELLOW (self):
-        self.send ('state', 'yellow ↰', None)
+        self.send ('state', '</yellow>', None)
+
     def handle_YELLOW (self, message):
-        if ('colour' == message.port):
-            self.next (self.states ["green"])
-            return True
-        elif self.state.sub ["handle"] (message):
+        if message.port == 'colour': 
+            self.next ('green')
             return True
         else:
-            self.unhandledMessage (message)
-        return False
-
+            return False
+        
+## state GREEN:
     def enter_GREEN (self):
-        self.send ('state', '↱ green', None)
-        self.state = self.states ["green"]
+        self.send ('state', '<green>', None)
+
     def exit_GREEN (self):
-        self.send ('state', 'green ↰', None)
+        self.send ('state', '</green>', None)
+
     def handle_GREEN (self, message):
-        if ('colour' == message.port):
-            self.next (self.states ["red"])
-            return True
-        elif self.state.sub ["handle"] (message):
+        if message.port == 'brightness': 
+            self.next ('red')
             return True
         else:
-            self.unhandledMessage (message)
-        return False
-
+            return False
+        
+## state RED:
     def enter_RED (self):
-        self.send ('state', '↱ red', None)
-        print (f'enter red')
-        self.state = self.states ["red"]
+        self.send ('state', '<red>', None)
+
     def exit_RED (self):
-        self.send ('state', 'red ↰', None)
+        self.send ('state', '</red>', None)
+
     def handle_RED (self, message):
-        if ('colour' == message.port):
-            self.next (self.states ["yellow"])
-            return True
-        elif self.state.sub.handle (message):
+        if message.port == 'brightness': 
+            self.next ('yellow')
             return True
         else:
-            self.unhandledMessage (message)
-        return False
-
+            return False
         
-
-    def __init__ (self, parent, instanceName):
-        super ().__init__ (parent, instanceName)
-        y = {'name': 'yellow', 'enter': self.enter_YELLOW, 'exit': self.exit_YELLOW, 'handle': self.handle_YELLOW, 'sub': None}
-        g = {'name': 'green', 'enter': self.enter_GREEN, 'exit': self.exit_GREEN, 'handle': self.handle_GREEN, 'sub': None}
-        r = {'name': 'red', 'enter': self.enter_RED, 'exit': self.exit_RED, 'handle': self.handle_RED, 'sub': None}
-        self.states = {'yellow': y, 'green': g, 'red': r }
-        self.defaultState = y
-        self.enterDefault ()
-
-        
+## create new instance
+    def __init__ (self, tophsm, layerName):
+        yellow = State (machine=self, name='yellow', enter=self.enter_YELLOW, exit=self.exit_YELLOW, handle=self.handle_YELLOW, subMachineClass=None)
+        green = State (machine=self, name='green', enter=self.enter_GREEN, exit=self.exit_GREEN, handle=self.handle_GREEN, subMachineClass=None)
+        red = State (machine=self, name='red', enter=self.enter_RED, exit=self.exit_RED, handle=self.handle_RED, subMachineClass=None)
+        stateList = [yellow, green, red]
+        super ().__init__ (tophsm, layerName, 
+                           enter=None, exit=None,
+                           defaultStateName='yellow', states=stateList)

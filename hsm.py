@@ -1,71 +1,94 @@
-from leaf import Leaf
-from container import Container
+from component import Component
 
-debugHSM = ''
-class HSM (Leaf):
-    def __init__ (self, parent, instanceName):
+debugHSM = True
+class HSM (Component):
+    def __init__ (self, parent, instanceName, enter, exit, defaultStateName, states):
         super ().__init__ (parent, instanceName)
-    def __repr__ (self):
-        return f'{self.name ()}:[{self.state["name"]}]'
-    def enter (self):
-        if (debugHSM and debugHSM == 'full'):
-            print (f'entering {self}')
-        self.state ["enter"] ()
-    def enterDefault (self):
-        self.state = self.defaultState
-        self.enter ()
-    def exit (self):
-        if (debugHSM and debugHSM == 'full'):
-            print (f'exiting {self}')
-        if (self.state ["sub"]):
-            self.state ["sub"].exit ()
-        self.state ["exit"] ()
-    def handle (self, message):
-        kind = 'Leaf'
-        if isinstance (self, Container):
-            kind = 'Container'
-        if (debugHSM):
-            print (f'handling HSM {kind} {self}...{message}')
-        return self.state ["handle"] (message)
-
-    def next (self, state):
-        self.exit ()
-        self.state = state
-        self.enter ()
+        self._machineEnter = enter
+        self._machineExit = exit
+        self._state = None
+        self._defaultStateName = defaultStateName
+        self._states = states
+        self.enterDefault ()
         
-    # override abstract methods
-    def reset (self):
-        self.exit ()
-        self.state = self.defaultState
+    def __repr__ (self):
+        return f'<machine {self.name ()}>'
+
+    def name (self):
+        return f'{super ().name ()}[{self._state.name ()}]'
+
+    def enter (self):
+        if debugHSM:
+            print (f'< {self.name ()} >')
+        if self._machineEnter:
+            self._machineEnter ()
+        self._state.enter ()
+
+    def exit (self):
+        if debugHSM:
+            print (f'</ {self.name ()} >')
+        self._state.exit ()
+        if self._machineExit:
+            self._machineExit ()
+
+    def enterDefault (self):
+        self._state = self.lookupState (self._defaultStateName)
         self.enter ()
 
-class SubHSM (HSM):
-    def __init__ (self, parent, instanceName):
-        self.parent = parent
-        self.instanceName = instanceName
-        # inputq and outputq are those of parent HSM
-    # external
-    def run (self):
-        raise Exception (f'run prohibited for SubHSM {self.name}')
-    def step (self, message):
-        raise Exception (f'step prohibitied for SubHSM {self.name}')
     def reset (self):
-        raise Exception (f'reset prohibited for SubHSM {self.name}')
-    def inject (self, message):
-        raise Exception (f'inject prohibited for SubHSM {self.name}')
-    def outputs (self):
-        raise Exception (f'outputs prohibited for SubHSM {self.name}')
-    def isReady (self):
-        raise Exception (f'isReady prohibited for SubHSM {self.name}')
-    def isBusy (self):
-        raise Exception (f'isBusy prohibited for SubHSM {self.name}')
-    #def name (self): <<inherited>>
+        self.exit ()
+        self.enterDefault ()
 
-    # internal
-    def dequeueInput (self):
-        raise Exception (f'dequeuInput prohibited for SubHSM {self.name}')
-    def send (self, portname, data, causingMessage):
-        sender = self.parent
-        sender.send (portname, data, causingMessage)
-    #def unhandledMessage (self, message): <<inherited>>
+    def handle (self, message):
+        if debugHSM:
+            print (f'? {self.name ()}')
+        r = self._state.handle (message)
+        assert r and (r == True or r == False)
+        if not r:
+            self.unhandledMessage (message)
+        else:
+            return True
+
+    def next (self, nextStateName):
+        self.exit ()
+        self._state = self.lookupState (nextStateName)
+        self.enter ()
+
+    def run (self):
+        while self.isBusy ():
+            self.step ()
+        while self.handleIfReady ():
+            while self.isBusy ():
+                self.step()
+
+
+    # a raw state machine always completes a step when handle() is called
+    # and is never busy
+    # (This is different for composite state machines, like Containers)
+    def step (self):
+        pass
     
+    def isBusy (self):
+        return False
+
+    def wrapper (self):
+        # the topmost HSM wraps all layers below it
+        return self
+
+    def unhandledMessage (self, message):
+        raise Exception (f'unhandled message {message.port} in {self.name ()}')
+                         
+# worker bees
+    def lookupState (self, name):
+        for state in self._states:
+            if state.baseName () == name:
+                return state
+        raise Exception (f'internal error: State /{name}/ not found in {self.baseName ()}') 
+
+    def handleIfReady (self):
+        if self.isReady ():
+            m = self.dequeueInput ();
+            self.handle (m)
+            return True
+        else:
+            return False

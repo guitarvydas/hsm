@@ -1,0 +1,7 @@
+(defun test ()
+  (let ((tb (make-instance 'TestBench :name "testbench")))
+    (let ((m (make-instance 'Message :sender tb :port "start" :data t :trail nil)))
+      (inject tb m)
+      (run tb)
+      (let ((outputs (outputs tb)))
+	(format *standard-output* "outputs: ~a~%" outputs)))))

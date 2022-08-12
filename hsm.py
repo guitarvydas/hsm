@@ -63,6 +63,9 @@ class HSM (Component):
     def isBusy (self):
         return False
 
+    def wrapper (self):
+        # the topmost HSM wraps all layers below it
+        return self
 
 # worker bees
     def lookupState (self, name):

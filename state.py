@@ -13,7 +13,7 @@ class State:
     
     def enter (self):
         if self._subMachineClass:
-            self._subMachine = self._subMachineClass (self, f'{self._subMachineClass.__name__}')
+            self._subMachine = self._subMachineClass (self.wrapper (), f'{self._subMachineClass.__name__}')
         self._enter ()
         
     def exit (self):
@@ -33,3 +33,5 @@ class State:
             subname = ':' + self._subMachine.name ()
         return f'{self._name}{subname}'
 
+    def wrapper (self):
+        return self._machine.wrapper ()

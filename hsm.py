@@ -70,9 +70,9 @@ class HSM (Component):
 # worker bees
     def lookupState (self, name):
         for state in self._states:
-            if state.name () == name:
+            if state.baseName () == name:
                 return state
-        raise Exception (f'internal error: State /{name}/ not found in {self.name ()}') 
+        raise Exception (f'internal error: State /{name}/ not found in {self.baseName ()}') 
 
     def handleIfReady (self):
         if self.isReady ():

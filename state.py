@@ -34,7 +34,7 @@ class State:
         return f'{self.baseName ()}{subname}'
 
     def baseName (self):
-        return {self._name}
+        return self._name
 
     def wrapper (self):
         return self._machine.wrapper ()

@@ -1,6 +1,6 @@
 from component import Component
 
-debugHSM = False
+debugHSM = True
 class HSM (Component):
     def __init__ (self, parent, instanceName, enter, exit, defaultStateName, states):
         super ().__init__ (parent, instanceName)

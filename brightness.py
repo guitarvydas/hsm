@@ -3,6 +3,8 @@ from message import Message
 from state import State
 from hsmlayer import HSMLayer
 
+from colour import Colour
+
 class Brightness (HSMLayer):
 
     def enter (self):
@@ -55,9 +57,9 @@ class Brightness (HSMLayer):
         
 ## create new instance
     def __init__ (self, tophsm, layerName):
-        dim = State (machine=self, name='dim', enter=self.enter_DIM, exit=self.exit_DIM, handle=self.handle_DIM, subMachineClass=None)
-        mid = State (machine=self, name='mid', enter=self.enter_MID, exit=self.exit_MID, handle=self.handle_MID, subMachineClass=None)
-        high = State (machine=self, name='high', enter=self.enter_HIGH, exit=self.exit_HIGH, handle=self.handle_HIGH, subMachineClass=None)
+        dim = State (machine=self, name='dim', enter=self.enter_DIM, exit=self.exit_DIM, handle=self.handle_DIM, subMachineClass=Colour)
+        mid = State (machine=self, name='mid', enter=self.enter_MID, exit=self.exit_MID, handle=self.handle_MID, subMachineClass=Colour)
+        high = State (machine=self, name='high', enter=self.enter_HIGH, exit=self.exit_HIGH, handle=self.handle_HIGH, subMachineClass=Colour)
         stateList = [dim, mid, high]
         super ().__init__ (tophsm, layerName, 
                            enter=None, exit=None,

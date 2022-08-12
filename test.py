@@ -5,6 +5,7 @@ l = Lamp (None, 'lamp')
 l.inject (Message (l, 'pwr', True, None))
 l.inject (Message (l, 'pwr', True, None))
 l.inject (Message (l, 'pwr', True, None))
+l.inject (Message (l, 'pwr', True, None))
 l.run ()
 print (l.outputs ())
 

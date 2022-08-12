@@ -31,7 +31,13 @@ class State:
         subname = ''
         if self._subMachine:
             subname = ':' + self._subMachine.name ()
-        return f'{self._name}{subname}'
+        return f'{self.baseName ()}{subname}'
+
+    def baseName (self):
+        return {self._name}
 
     def wrapper (self):
         return self._machine.wrapper ()
+
+    def next (self, nextStateName):
+        self._machine.next (nextStateName)

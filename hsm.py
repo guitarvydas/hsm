@@ -43,8 +43,11 @@ class HSM (Component):
         if debugHSM:
             print (f'? {self.name ()}')
         r = self._state.handle (message)
+        assert r and (r == True or r == False)
         if not r:
             self.unhandledMessage (message)
+        else:
+            return True
 
     def next (self, nextStateName):
         self.exit ()

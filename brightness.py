@@ -22,10 +22,7 @@ class Brightness (HSMLayer):
         if message.port == 'brightness': 
             self.next ('mid')
             return True
-        elif self.delegate (message):
-            return True
         else:
-            self.unhandledMessage (message)
             return False
         
 ## state MID:
@@ -39,10 +36,7 @@ class Brightness (HSMLayer):
         if message.port == 'brightness': 
             self.next ('high')
             return True
-        elif self.delegate (message):
-            return True
         else:
-            self.unhandledMessage (message)
             return False
         
 ## state HIGH:
@@ -56,10 +50,7 @@ class Brightness (HSMLayer):
         if message.port == 'brightness': 
             self.next ('dim')
             return True
-        elif self.delegate (message):
-            return True
         else:
-            self.unhandledMessage (message)
             return False
         
 ## create new instance

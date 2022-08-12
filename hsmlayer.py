@@ -12,13 +12,13 @@ class HSMLayer (HSM):
     ## Likewise, name () cannot invoke Component/name and must bottom-out here
     
     def __init__ (self, tophsm, layerName, enter, exit, defaultStateName, states):
-        super ().__init__ (None, '', enter, exit, defaultStateName, states)
         self._topHSM = tophsm
         self._layerName = layerName
         self._parent = None
         self._instanceName = ''
         self._inputq = None
         self._outputq = None
+        super ().__init__ (None, '', enter, exit, defaultStateName, states)
         
     def send (self, portname, data, causingMessage):
         self._topHSM.send (portname, data, causingMessage)

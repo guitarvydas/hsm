@@ -42,7 +42,9 @@ class HSM (Component):
     def handle (self, message):
         if debugHSM:
             print (f'? {self.name ()}')
-        self._state.handle (message)
+        r = self._state.handle (message)
+        if not r:
+            self.unhandledMessage (message)
 
     def next (self, nextStateName):
         self.exit ()
@@ -70,6 +72,9 @@ class HSM (Component):
         # the topmost HSM wraps all layers below it
         return self
 
+    def unhandledMessage (self, message):
+        raise Exception (f'unhandled message {message.port} in {self.name ()}')
+                         
 # worker bees
     def lookupState (self, name):
         for state in self._states:

@@ -25,7 +25,6 @@ class Lamp (HSM):
             self.next ('on')
             return True
         else:
-            self.unhandledMessage (message)
             return False
         
 ## state ON:
@@ -40,13 +39,12 @@ class Lamp (HSM):
             self.next ('off')
             return True
         else:
-            self.unhandledMessage (message)
             return False
         
 ## create new instance
     def __init__ (self, parent, instanceName):
         off = State (machine=self, name='off', enter=self.enter_OFF, exit=self.exit_OFF, handle=self.handle_OFF, subMachineClass=None)
-        on = State (machine=self, name='on', enter=self.enter_ON, exit=self.exit_ON, handle=self.handle_ON, subMachineClass=Brightness)
+        on = State (machine=self, name='on', enter=self.enter_ON, exit=self.exit_ON, handle=self.handle_ON, subMachineClass=None)
         stateList = [off, on]
         super ().__init__ (parent, instanceName, 
                            enter=None, exit=None,

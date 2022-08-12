@@ -23,8 +23,8 @@ class State:
 
     def handle (self, message):
         r = self._handle (message)
-        if (not r) and (self._subMachine):
-            r = self._subMachine.handle (message)
+        if (not r):
+            r = self.delegate (message)
         return r
 
     def name (self):
@@ -41,3 +41,11 @@ class State:
 
     def next (self, nextStateName):
         self._machine.next (nextStateName)
+
+    def delegate (self, message):
+        if self._subMachine:
+            return self._subMachine.handle (message)
+        else:
+            return False
+
+        

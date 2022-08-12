@@ -36,10 +36,12 @@ class Component:
         return (not self._inputq.isEmpty ())
     def name (self):
         if (None == self._parent):
-            return self._instanceName
+            return self.baseName ()
         else:
             return f'{self._parent.name ()}/{self._instanceName}'
 
+    def baseName (self):
+        return self._instanceName
 
     # internal
     def clearOutputs (self):
